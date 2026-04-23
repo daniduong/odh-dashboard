@@ -2,8 +2,8 @@
 
 **Feature Branch**: `002-autox-shared-library`  
 **Generated**: 2026-04-23  
-**Total Tasks**: 199  
-**Estimated Effort**: 357 hours (8-12 weeks with 2-3 developers)
+**Total Tasks**: 202 (updated after /speckit.analyze remediation)
+**Estimated Effort**: 360 hours (8-12 weeks with 2-3 developers)
 
 ---
 
@@ -295,6 +295,7 @@ Polish Phase (T083-T089)
 - [ ] T093 [US2] Run npm test from packages/autox/frontend to verify all AutoX tests pass
 - [ ] T093a [US2] Generate coverage report (npm test -- --coverage) and verify ≥80% overall coverage and 100% for critical utilities (fail if thresholds not met)
 - [ ] T094 [US2] Start dev server (npm run dev) and manually verify AutoML/AutoRAG features work with AutoX primitives
+- [ ] T094a [US2] Verify SC-003 threshold: Calculate UI LOC reduction percentage and confirm ≥50% (compare AutoML+AutoRAG frontend before/after extraction to AutoX frontend)
 
 **US2 Independent Test**:
 - ✅ AutoML component imports AutoX hook, composes it, and renders correctly
@@ -302,6 +303,7 @@ Polish Phase (T083-T089)
 - ✅ Both packages achieve their specific UI while sharing base logic from AutoX
 - ✅ TypeScript compilation succeeds with no errors
 - ✅ All AutoX unit tests pass
+- ✅ UI duplication reduction meets ≥50% threshold (SC-003)
 
 ---
 
@@ -423,12 +425,14 @@ Polish Phase (T083-T089)
 - [ ] T145 [US7] Manual browser testing of AutoML/AutoRAG Configure pages with AutoX primitives
 - [ ] T146 [US7] Manual browser testing of AutoML/AutoRAG Leaderboards with AutoX primitives
 - [ ] T147 [US7] Run git diff to verify LOC reduction (~7,000 LOC removed)
+- [ ] T147a [US7] Verify SC-002 threshold: Calculate BFF LOC reduction percentage and confirm ≥60% (compare AutoML+AutoRAG BFF before/after extraction to AutoX BFF)
 
 **US7 Phase 2 Independent Test**:
 - ✅ High-value components (Configure pages, Leaderboards, modals) extracted and working
 - ✅ Integration clients (S3, K8s, Pipeline Server) fully extracted and functional
 - ✅ AutoML and AutoRAG compose AutoX primitives correctly
 - ✅ All tests pass, codebase reduced by ~7,000 LOC
+- ✅ BFF duplication reduction meets ≥60% threshold (SC-002)
 
 ---
 
@@ -439,6 +443,10 @@ Polish Phase (T083-T089)
 **Duration**: 16-20 hours  
 **Dependencies**: US1, US2, US3 complete  
 **Deliverable**: Working examples of strategy/DI pattern for AutoML and AutoRAG
+
+### Precondition Validation Tasks
+
+- [ ] T147b [US4] Validate service extraction candidates (PipelineRepository, SecretRepository) meet ≥80% duplication threshold per FR-007 research requirement before implementing strategy/DI pattern
 
 ### Implementation Tasks
 
@@ -529,6 +537,7 @@ Polish Phase (T083-T089)
 
 - [ ] T183 Update .github/workflows CI configuration to run tests for AutoX package
 - [ ] T184 Add type-checking step to CI that verifies all packages compile together (go build ./..., tsc --noEmit)
+- [ ] T184a Verify CI catches breaking changes by introducing test breaking change in AutoX (e.g., rename exported interface), confirm AutoML/AutoRAG builds fail in CI, then revert change
 - [ ] T185 Add linting step for AutoX (ESLint for frontend, golint for BFF)
 - [ ] T186 Verify CI catches breaking changes when AutoX is modified
 
@@ -539,8 +548,6 @@ Polish Phase (T083-T089)
 - [ ] T189 Perform manual E2E testing of AutoRAG features using AutoX
 - [ ] T190 Generate bundle size report and verify AutoX singleton reduces duplication
 - [ ] T191 Run final git diff to verify total LOC reduction (~31,500 LOC target)
-- [ ] T191a Verify SC-002 threshold: Calculate BFF LOC reduction percentage and confirm ≥60% (compare AutoML+AutoRAG BFF before/after extraction to AutoX BFF)
-- [ ] T191b Verify SC-003 threshold: Calculate UI LOC reduction percentage and confirm ≥50% (compare AutoML+AutoRAG frontend before/after extraction to AutoX frontend)
 
 **Polish Phase Test**:
 - ✅ All documentation up-to-date and accurate
@@ -698,7 +705,7 @@ Polish Phase (T083-T089)
 
 ---
 
-**Total Tasks**: 199  
+**Total Tasks**: 202 (includes T094a, T147a, T147b, T184a added via /speckit.analyze remediation)
 **Parallelizable Tasks**: 68 (marked with `[P]`)  
 **Sequential Dependencies**: Clearly marked in phase dependencies  
 **Estimated Completion**: 8-12 weeks with 2-3 developers working full-time
