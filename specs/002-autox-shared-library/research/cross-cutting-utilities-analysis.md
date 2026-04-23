@@ -45,7 +45,7 @@ isRunRetryable(state: string | undefined): boolean
 
 **Extractable**: ✅ Yes — Zero parameterization needed
 
-**Recommendation**: Extract to `@odh-dashboard/autox-shared/utils/pipelineRunStates.ts`
+**Recommendation**: Extract to `autox/frontend/src/utils/pipelineRunStates.ts`
 
 **LOC**: 25 lines (duplicated across both packages)
 
@@ -70,7 +70,7 @@ parseErrorStatus(error: Error): number | undefined
 
 **Extractable**: ✅ Yes — Zero parameterization needed
 
-**Recommendation**: Extract to `@odh-dashboard/autox-shared/utils/errorParsing.ts`
+**Recommendation**: Extract to `autox/frontend/src/utils/errorParsing.ts`
 
 **LOC**: 17 lines (duplicated across both packages)
 
@@ -160,7 +160,7 @@ downloadBlob(blob: Blob, filename: string): void
 
 **Extractable**: ✅ Yes — Zero parameterization needed
 
-**Recommendation**: Extract to `@odh-dashboard/autox-shared/utils/download.ts`
+**Recommendation**: Extract to `autox/frontend/src/utils/download.ts`
 
 **LOC**: 11 lines (duplicated across both packages)
 
@@ -210,7 +210,7 @@ createNode(
 
 **Extractable**: ✅ Yes — With type imports from shared types
 
-**Recommendation**: Extract to `@odh-dashboard/autox-shared/topology/utils.ts`
+**Recommendation**: Extract to `autox/frontend/src/topology/utils.ts`
 
 **LOC**: 39 lines (duplicated across both packages)
 
@@ -248,7 +248,7 @@ PipelineRun
 
 **Extractable**: ✅ Yes — Zero parameterization needed
 
-**Recommendation**: Extract to `@odh-dashboard/autox-shared/types/core.ts`
+**Recommendation**: Extract to `autox/frontend/src/types/core.ts`
 
 **LOC**: ~110 lines
 
@@ -302,7 +302,7 @@ S3ListObjectsResponse
 
 **Extractable**: ✅ Yes — With minor type refinement
 
-**Recommendation**: Extract to `@odh-dashboard/autox-shared/types/s3.ts` and `types/secrets.ts`
+**Recommendation**: Extract to `autox/frontend/src/types/s3.ts` and `types/secrets.ts`
 
 **LOC**: ~40 lines
 
@@ -368,7 +368,7 @@ PipelineVersionKF
 
 **Extractable**: ✅ Yes — Zero parameterization needed
 
-**Recommendation**: Extract entire file to `@odh-dashboard/autox-shared/types/pipeline.ts`
+**Recommendation**: Extract entire file to `autox/frontend/src/types/pipeline.ts`
 
 **LOC**: 186 lines (duplicated across both packages)
 
@@ -394,7 +394,7 @@ PipelineNodeModelExpanded
 
 **Extractable**: ✅ Yes — Zero parameterization needed
 
-**Recommendation**: Extract entire file to `@odh-dashboard/autox-shared/types/topology.ts`
+**Recommendation**: Extract entire file to `autox/frontend/src/types/topology.ts`
 
 **LOC**: 46 lines (duplicated across both packages)
 
@@ -423,7 +423,7 @@ ResponseLogValuer struct { Response *http.Response; Body []byte } with LogValue(
 
 **Extractable**: ✅ Yes — Requires module path parameterization
 
-**Recommendation**: Extract to `autox-shared-bff/internal/helpers/logging.go`
+**Recommendation**: Extract to `autox/bff/pkg/helpers/logging.go`
 
 **LOC**: 125 lines (duplicated across both packages)
 
@@ -445,7 +445,7 @@ BuildScheme() (*runtime.Scheme, error)
 
 **Extractable**: ✅ Yes — Zero parameterization needed
 
-**Recommendation**: Extract to `autox-shared-bff/internal/helpers/k8s.go`
+**Recommendation**: Extract to `autox/bff/pkg/helpers/k8s.go`
 
 **LOC**: 29 lines (duplicated across both packages)
 
@@ -470,7 +470,7 @@ ParseURLTemplate(tmpl string, params map[string]string) string
 
 **Extractable**: ✅ Yes — Zero parameterization needed
 
-**Recommendation**: Extract to `autox-shared-bff/internal/api/helpers.go`
+**Recommendation**: Extract to `autox/bff/pkg/api/helpers.go`
 
 **LOC**: 108 lines (duplicated across both packages)
 
@@ -523,7 +523,7 @@ UrlWithPageParams(url string, values url.Values) string
 
 **Extractable**: ✅ Yes — Zero parameterization needed
 
-**Recommendation**: Extract to `autox-shared-bff/internal/repositories/helpers.go`
+**Recommendation**: Extract to `autox/bff/pkg/repositories/helpers.go`
 
 **LOC**: 69 lines (duplicated across both packages)
 
@@ -535,12 +535,12 @@ UrlWithPageParams(url string, values url.Values) string
 
 | Utility | Source | Target Location | LOC | Status |
 |---------|--------|-----------------|-----|--------|
-| Pipeline run state utils | `utilities/utils.ts` | `@odh-dashboard/autox-shared/utils/pipelineRunStates.ts` | 25 | ✅ 100% match |
-| Error status parsing | `utilities/utils.ts` | `@odh-dashboard/autox-shared/utils/errorParsing.ts` | 17 | ✅ 100% match |
-| Blob download | `utilities/utils.ts` | `@odh-dashboard/autox-shared/utils/download.ts` | 11 | ✅ 100% match |
-| Metric value formatting | `utilities/utils.ts` | `@odh-dashboard/autox-shared/utils/metricFormatting.ts` | 11 | ✅ 100% match |
-| Metric name formatting | `utilities/utils.ts` | `@odh-dashboard/autox-shared/utils/metricFormatting.ts` | ~15 | ⚠️ Configurable |
-| Topology node creation | `topology/utils.ts` | `@odh-dashboard/autox-shared/topology/utils.ts` | 39 | ✅ 100% match |
+| Pipeline run state utils | `utilities/utils.ts` | `autox/frontend/src/utils/pipelineRunStates.ts` | 25 | ✅ 100% match |
+| Error status parsing | `utilities/utils.ts` | `autox/frontend/src/utils/errorParsing.ts` | 17 | ✅ 100% match |
+| Blob download | `utilities/utils.ts` | `autox/frontend/src/utils/download.ts` | 11 | ✅ 100% match |
+| Metric value formatting | `utilities/utils.ts` | `autox/frontend/src/utils/metricFormatting.ts` | 11 | ✅ 100% match |
+| Metric name formatting | `utilities/utils.ts` | `autox/frontend/src/utils/metricFormatting.ts` | ~15 | ⚠️ Configurable |
+| Topology node creation | `topology/utils.ts` | `autox/frontend/src/topology/utils.ts` | 39 | ✅ 100% match |
 | **Total Frontend Utils** | | | **~118** | |
 
 ---
@@ -549,12 +549,12 @@ UrlWithPageParams(url string, values url.Values) string
 
 | Type Category | Source | Target Location | LOC | Status |
 |---------------|--------|-----------------|-----|--------|
-| Core types | `types.ts` | `@odh-dashboard/autox-shared/types/core.ts` | 110 | ✅ 100% match |
-| LlamaStack base types | `types.ts` | `@odh-dashboard/autox-shared/types/llamastack.ts` | 12 | ✅ Partial |
-| Secret types | `types.ts` | `@odh-dashboard/autox-shared/types/secrets.ts` | 20 | ✅ 100% match |
-| S3 types | `types.ts` | `@odh-dashboard/autox-shared/types/s3.ts` | 20 | ✅ 100% match |
-| Pipeline types | `types/pipeline.ts` | `@odh-dashboard/autox-shared/types/pipeline.ts` | 186 | ✅ 100% match |
-| Topology types | `types/topology.ts` | `@odh-dashboard/autox-shared/types/topology.ts` | 46 | ✅ 100% match |
+| Core types | `types.ts` | `autox/frontend/src/types/core.ts` | 110 | ✅ 100% match |
+| LlamaStack base types | `types.ts` | `autox/frontend/src/types/llamastack.ts` | 12 | ✅ Partial |
+| Secret types | `types.ts` | `autox/frontend/src/types/secrets.ts` | 20 | ✅ 100% match |
+| S3 types | `types.ts` | `autox/frontend/src/types/s3.ts` | 20 | ✅ 100% match |
+| Pipeline types | `types/pipeline.ts` | `autox/frontend/src/types/pipeline.ts` | 186 | ✅ 100% match |
+| Topology types | `types/topology.ts` | `autox/frontend/src/types/topology.ts` | 46 | ✅ 100% match |
 | **Total Frontend Types** | | | **~394** | |
 
 ---
@@ -563,11 +563,11 @@ UrlWithPageParams(url string, values url.Values) string
 
 | Utility | Source | Target Location | LOC | Status |
 |---------|--------|-----------------|-----|--------|
-| Logging helpers | `internal/helpers/logging.go` | `autox-shared-bff/internal/helpers/logging.go` | 125 | ✅ 100% match |
-| Kubernetes helpers | `internal/helpers/k8s.go` | `autox-shared-bff/internal/helpers/k8s.go` | 29 | ✅ 100% match |
-| API helpers | `internal/api/helpers.go` | `autox-shared-bff/internal/api/helpers.go` | 108 | ✅ 100% match |
-| Repository helpers | `internal/repositories/helpers.go` | `autox-shared-bff/internal/repositories/helpers.go` | 69 | ✅ 100% match |
-| Error response helpers | `internal/api/public_helpers.go` | `autox-shared-bff/internal/api/error_helpers.go` | 40 | ⚠️ Partial |
+| Logging helpers | `internal/helpers/logging.go` | `autox/bff/pkg/helpers/logging.go` | 125 | ✅ 100% match |
+| Kubernetes helpers | `internal/helpers/k8s.go` | `autox/bff/pkg/helpers/k8s.go` | 29 | ✅ 100% match |
+| API helpers | `internal/api/helpers.go` | `autox/bff/pkg/api/helpers.go` | 108 | ✅ 100% match |
+| Repository helpers | `internal/repositories/helpers.go` | `autox/bff/pkg/repositories/helpers.go` | 69 | ✅ 100% match |
+| Error response helpers | `internal/api/public_helpers.go` | `autox/bff/pkg/api/error_helpers.go` | 40 | ⚠️ Partial |
 | **Total BFF Utilities** | | | **~371** | |
 
 ---
@@ -652,7 +652,7 @@ UrlWithPageParams(url string, values url.Values) string
 ### 7.1 Shared Library Structure
 
 ```text
-packages/autox-shared/
+packages/autox/
 ├── frontend/
 │   ├── src/
 │   │   ├── types/
@@ -671,7 +671,7 @@ packages/autox-shared/
 │   │       └── utils.ts             # Topology node creation (39 LOC)
 │   └── package.json
 ├── bff/
-│   ├── internal/
+│   ├── pkg/
 │   │   ├── helpers/
 │   │   │   ├── logging.go           # Logging helpers (125 LOC)
 │   │   │   └── k8s.go               # K8s helpers (29 LOC)

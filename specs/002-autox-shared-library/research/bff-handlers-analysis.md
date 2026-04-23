@@ -569,7 +569,7 @@ if err := decoder.Decode(&req); err != nil {
 
 ## Next Steps
 
-1. ✅ Create shared `handlers` package in `packages/autox-shared/bff/internal/handlers/`
+1. ✅ Create shared `handlers` package in `packages/autox/bff/pkg/handlers/`
 2. ✅ Extract 100% identical handlers first (healthcheck, namespaces, user)
 3. ✅ Extract s3_handler.go helpers and core logic
 4. ✅ Extract pipeline_runs_handler.go helpers

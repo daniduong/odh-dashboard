@@ -12,23 +12,21 @@
 
 This document defines the public API contract for the AutoX BFF (Backend For Frontend) shared library. All interfaces, types, and functions exported by AutoX BFF are guaranteed to maintain backward compatibility within the same major version. Breaking changes will only occur with major version bumps.
 
-**Target Consumers**: AutoML BFF, AutoRAG BFF (monorepo-internal only)
+**Target Consumers**: AutoML BFF, AutoRAG BFF
 
 **Import Path Convention**:
 
 ```go
 import (
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/kubernetes"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/s3"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/pipelineserver"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/repositories"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/api"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/utils"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/kubernetes"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/s3"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/pipelineserver"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/repositories"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/api"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/utils"
 )
 ```
-
-**Note**: While these are `internal/` packages (not `pkg/`), they are intended for consumption by AutoML and AutoRAG within the same Go module (monorepo). The `internal/` directory prevents external packages outside the monorepo from importing AutoX.
 
 ---
 
@@ -36,10 +34,10 @@ import (
 
 ### Stable API (Backward Compatible)
 
-- **Models** (`internal/models/*`): All struct fields, JSON tags, validation
-- **Interfaces** (`internal/integrations/*/interface.go`): Method signatures, parameters, return types
-- **Repositories** (`internal/repositories/*`): Public methods, data structures
-- **API Utilities** (`internal/api/*`): Error response format, helper function signatures
+- **Models** (`pkg/models/*`): All struct fields, JSON tags, validation
+- **Interfaces** (`pkg/integrations/*/interface.go`): Method signatures, parameters, return types
+- **Repositories** (`pkg/repositories/*`): Public methods, data structures
+- **API Utilities** (`pkg/api/*`): Error response format, helper function signatures
 
 ### Unstable API (May Change)
 
@@ -56,7 +54,7 @@ import (
 
 ---
 
-## 1. Models (`internal/models`)
+## 1. Models (`pkg/models`)
 
 ### 1.1 Core Models
 
@@ -272,7 +270,7 @@ type ErrorResponse struct {
 
 ---
 
-## 2. Integration Interfaces (`internal/integrations`)
+## 2. Integration Interfaces (`pkg/integrations`)
 
 ### 2.1 Kubernetes Client Interface
 
@@ -313,7 +311,7 @@ type KubernetesClientInterface interface {
 
 ```go
 // AutoML handler
-import k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/kubernetes"
+import k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/kubernetes"
 
 func (h *Handler) GetSecrets(ctx context.Context, namespace string) error {
     secrets, err := h.k8sClient.ListSecrets(ctx, namespace, metav1.ListOptions{
@@ -375,7 +373,7 @@ type S3ClientInterface interface {
 
 ```go
 // AutoRAG handler
-import s3 "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/s3"
+import s3 "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/s3"
 
 func (h *Handler) UploadFile(ctx context.Context, bucket, key string, file io.Reader) error {
     err := h.s3Client.PutObject(ctx, bucket, key, file)
@@ -397,7 +395,7 @@ package pipelineserver
 
 import (
     "context"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
 )
 
 // PipelineServerClientInterface defines the contract for KFP operations
@@ -428,7 +426,7 @@ type PipelineServerClientInterface interface {
 
 ```go
 // AutoML handler
-import ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/pipelineserver"
+import ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/pipelineserver"
 
 func (h *Handler) CreateRun(ctx context.Context, req *models.CreatePipelineRunRequest) error {
     run, err := h.psClient.CreatePipelineRun(ctx, req)
@@ -444,7 +442,7 @@ func (h *Handler) CreateRun(ctx context.Context, req *models.CreatePipelineRunRe
 
 ---
 
-## 3. Repository Patterns (`internal/repositories`)
+## 3. Repository Patterns (`pkg/repositories`)
 
 ### 3.1 Pipeline Repository
 
@@ -453,7 +451,7 @@ package repositories
 
 import (
     "context"
-    ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/pipelineserver"
+    ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/pipelineserver"
 )
 
 // DiscoveredPipeline represents a pipeline found via discovery
@@ -505,7 +503,7 @@ type PipelineRepository interface {
 ```go
 // AutoML handler
 import (
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/repositories"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/repositories"
 )
 
 func (h *Handler) DiscoverPipelines(ctx context.Context, namespace string) error {
@@ -544,8 +542,8 @@ package repositories
 
 import (
     "context"
-    k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/kubernetes"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
+    k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/kubernetes"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
 )
 
 // SecretRepository handles secret filtering and retrieval
@@ -571,7 +569,7 @@ type SecretRepository interface {
 ```go
 // AutoRAG handler (with custom filtering)
 import (
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/repositories"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/repositories"
 )
 
 func (h *Handler) GetLlamaStackSecrets(ctx context.Context, namespace string) ([]models.Secret, error) {
@@ -604,7 +602,7 @@ func filterLlamaStackSecrets(secrets []models.Secret) []models.Secret {
 
 ---
 
-## 4. API Utilities (`internal/api`)
+## 4. API Utilities (`pkg/api`)
 
 ### 4.1 Error Response Helpers
 
@@ -613,7 +611,7 @@ package api
 
 import (
     "net/http"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
 )
 
 // ErrorHandler provides standardized error responses
@@ -641,7 +639,7 @@ func WriteServerError(w http.ResponseWriter, err error)
 
 ```go
 // AutoML handler
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/api"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/api"
 
 func (h *Handler) HandleRequest(w http.ResponseWriter, r *http.Request) {
     data, err := h.service.GetData(r.Context())
@@ -688,7 +686,7 @@ func ReadJSON(r *http.Request, dst interface{}) error
 **Usage Example**:
 
 ```go
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/api"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/api"
 
 func (h *Handler) CreatePipeline(w http.ResponseWriter, r *http.Request) {
     var req models.CreatePipelineRunRequest
@@ -733,7 +731,7 @@ type Logger interface {
 **Usage Example**:
 
 ```go
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/api"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/api"
 
 func setupRouter() http.Handler {
     router := httprouter.New()
@@ -748,7 +746,7 @@ func setupRouter() http.Handler {
 
 ---
 
-## 5. Utilities (`internal/utils`)
+## 5. Utilities (`pkg/utils`)
 
 ### 5.1 Pagination Helpers
 
@@ -830,8 +828,8 @@ func GetSecrets(namespace string) ([]models.Secret, error) {
 
 **AutoX provides**:
 - Unit tests for all exported functions
-- Mock implementations for all interfaces (in `internal/mocks/`)
-- Example usage in `internal/examples/` (not part of stable API)
+- Mock implementations for all interfaces (in `pkg/mocks/`)
+- Example usage in `pkg/examples/` (not part of stable API)
 
 ---
 
@@ -848,7 +846,7 @@ func GetSecrets(namespace string) ([]models.Secret, error) {
 import "github.com/opendatahub-io/odh-dashboard/packages/automl/bff/internal/models"
 
 // After (AutoX shared code)
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
 ```
 
 **Step 4**: Remove duplicate code from consumer package  

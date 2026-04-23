@@ -323,20 +323,20 @@ This analysis examines code duplication in utility/helper files between AutoML a
 **High-value, zero-risk migrations:**
 
 1. **`cmd/helpers.go`** (63 lines)
-   - Target: `packages/autox-shared/bff/pkg/env/helpers.go`
+   - Target: `packages/autox/bff/pkg/env/helpers.go`
    - Functions: `getEnvAsInt`, `getEnvAsString`, `getEnvAsBool`, `parseLevel`, `newOriginParser`
 
 2. **`internal/helpers/k8s.go`** (28 lines)
-   - Target: `packages/autox-shared/bff/pkg/k8s/helpers.go`
+   - Target: `packages/autox/bff/pkg/k8s/helpers.go`
    - Functions: `GetKubeconfig`, `BuildScheme`
 
 3. **`internal/api/helpers.go`** (108 lines)
-   - Target: `packages/autox-shared/bff/pkg/http/helpers.go`
+   - Target: `packages/autox/bff/pkg/http/helpers.go`
    - Functions: `WriteJSON`, `ReadJSON`, `ParseURLTemplate`
    - Types: `Envelope[D, M]`, `None`
 
 4. **`internal/repositories/helpers.go`** (68 lines)
-   - Target: `packages/autox-shared/bff/pkg/pagination/helpers.go`
+   - Target: `packages/autox/bff/pkg/pagination/helpers.go`
    - Functions: `FilterPageValues`, `UrlWithParams`, `UrlWithPageParams`
 
 **Total Lines Saved:** 267 lines (removing duplicates across 2 packages = 534 lines of duplication)
@@ -348,14 +348,14 @@ This analysis examines code duplication in utility/helper files between AutoML a
 **Require minimal adjustments:**
 
 5. **`internal/helpers/logging.go`** (124 lines, 99.2% duplicate)
-   - Target: `packages/autox-shared/bff/pkg/logging/helpers.go`
+   - Target: `packages/autox/bff/pkg/logging/helpers.go`
    - Functions: `GetContextLoggerFromReq`, `GetContextLogger`, `CloneBody`
    - Types: `HeaderLogValuer`, `RequestLogValuer`, `ResponseLogValuer`
    - Constants: `sensitiveHeaders`, `maxBodySize`
    - **Adjustment Needed:** Remove constants package import dependency (line 12)
 
 6. **`internal/api/public_helpers.go`** (75 lines, 98.7% duplicate)
-   - Target: `packages/autox-shared/bff/pkg/api/public_helpers.go`
+   - Target: `packages/autox/bff/pkg/api/public_helpers.go`
    - Functions: `BadRequest`, `ServerError`, `NotImplemented`, `EndpointNotImplementedHandler`, `Config`, `Logger`, `KubernetesClientFactory`, `Repositories`
    - **Adjustment Needed:** Generify `App` interface or use interface-based access
 
@@ -366,7 +366,7 @@ This analysis examines code duplication in utility/helper files between AutoML a
 ### Priority 3: Test Utilities (>85%)
 
 7. **`internal/api/test_utils.go`** (165 lines, 92.7% duplicate)
-   - Target: `packages/autox-shared/bff/pkg/testing/api_helpers.go`
+   - Target: `packages/autox/bff/pkg/testing/api_helpers.go`
    - Functions: `setupApiTest`, `newTestApp`, `setupApiTestPostMultipart`
    - **Adjustment Needed:** 
      - Abstract `NewTestApp` constructor signature differences (S3ClientFactory parameter)
@@ -380,7 +380,7 @@ This analysis examines code duplication in utility/helper files between AutoML a
 
 8. **`internal/api/k8s_helpers.go`** (AutoRAG-only, 83 lines)
    - **Action:** Extract to shared library AND migrate to AutoML
-   - Target: `packages/autox-shared/bff/pkg/k8s/errors.go`
+   - Target: `packages/autox/bff/pkg/k8s/errors.go`
    - Functions: `handleK8sClientError`, `getDefaultStatusCodeForK8sError`, `mapK8sErrorToHTTPError`
    - **Benefit:** Standardize K8s error handling across both packages
 
@@ -469,7 +469,7 @@ This analysis examines code duplication in utility/helper files between AutoML a
 ## Migration Path Recommendations
 
 ### Phase 1: Foundation (Week 1)
-1. Create `packages/autox-shared/bff/pkg/` directory structure
+1. Create `packages/autox/bff/pkg/` directory structure
 2. Migrate 100% duplicates (Priority 1):
    - `pkg/env/` - Environment helpers
    - `pkg/k8s/` - Kubernetes helpers

@@ -13,7 +13,7 @@
 
 This document defines the public API contract for the AutoX UI (frontend) shared library. All hooks, components, types, and utilities exported by AutoX UI are guaranteed to maintain backward compatibility within the same major version. Breaking changes will only occur with major version bumps.
 
-**Target Consumers**: AutoML Frontend, AutoRAG Frontend (monorepo-internal only)
+**Target Consumers**: AutoML Frontend, AutoRAG Frontend
 
 **Import Path Convention**:
 

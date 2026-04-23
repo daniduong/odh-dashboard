@@ -163,7 +163,7 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 
 ### Functional Requirements
 
-- **FR-001**: AutoX package MUST be created under `odh-dashboard/packages/autox` with both `frontend/` and `bff/` subdirectories following standard monorepo package structure: `autox/frontend/src/{hooks,components,utils,types}` for UI and `autox/bff/internal/{api,models,integrations,utils}` for BFF (consistent with existing packages like gen-ai, automl, autorag). BFF uses only `internal/` directory (no `pkg/`) since AutoX is monorepo-internal and consumed only by AutoML and AutoRAG within the same module
+- **FR-001**: AutoX package MUST be created under `odh-dashboard/packages/autox` with both `frontend/` and `bff/` subdirectories following standard monorepo package structure: `autox/frontend/src/{hooks,components,utils,types}` for UI and `autox/bff/pkg/{api,models,integrations,utils}` for BFF (consistent with existing packages like gen-ai, automl, autorag)
 
 - **FR-002**: AutoX BFF MUST export shared interfaces, utilities, and clients that are consumed by AutoML and AutoRAG BFF layers
 
@@ -229,7 +229,7 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 
 - **SC-006**: Only one instance of AutoX loads in the browser when both AutoML and AutoRAG are active (verified via webpack bundle analysis)
 
-- **SC-007**: All AutoX exports have 100% unit test coverage for critical utilities and at least 80% for other code. AutoML and AutoRAG each have integration tests covering their composition of AutoX primitives for key user flows
+- **SC-007**: All AutoX exports have 100% unit test coverage for critical utilities (utilities handling authentication, S3 operations, K8s client interactions, or data validation) and at least 80% for other code. AutoML and AutoRAG each have integration tests covering their composition of AutoX primitives for key user flows
 
 - **SC-008**: Breaking changes in AutoX are caught at compile time in AutoML and AutoRAG (TypeScript/Go type checking), and all three packages are updated together atomically in the same PR with coordinated testing
 
@@ -274,10 +274,9 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 
 ### Session 2026-04-22
 
-- Q: What internal directory structure should AutoX follow? → A: Standard monorepo package structure (autox/frontend/src/{hooks,components,utils,types}, autox/bff/internal/{api,models,utils}) matching existing packages
+- Q: What internal directory structure should AutoX follow? → A: Standard monorepo package structure (autox/frontend/src/{hooks,components,utils,types}, autox/bff/pkg/{api,models,utils}) matching existing packages
 - Q: How should AutoX UI be configured in Module Federation? → A: AutoX as federated shared dependency in AutoML/AutoRAG webpack config (singleton: true, requiredVersion) - standard shared lib pattern
 - Q: What versioning strategy should be used for AutoX and its consumers? → A: Synchronized versioning: AutoX, AutoML, AutoRAG always updated together in same PR, tested together, no independent versions
 - Q: Where should integration tests for AutoX live? → A: Integration tests in AutoML/AutoRAG packages that verify AutoX primitives compose correctly - tests at point of use, no circular deps
-- Q: Should AutoX BFF use both internal/ and pkg/ directories? → A: Only internal/, no pkg/ directory - simpler, sufficient for monorepo-internal sharing, AutoML/AutoRAG import from internal/*
 - Q: How should breaking changes in AutoX interfaces be detected before they break AutoML/AutoRAG in production? → A: CI type-checking all packages together (fail on errors)
 - Q: What specific characteristics define a "low-level primitive" component in AutoX versus a "monolithic component with extensive prop variants" that should be avoided? → A: Single responsibility, composable, no strict prop limit
