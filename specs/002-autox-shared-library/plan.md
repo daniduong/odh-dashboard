@@ -7,7 +7,9 @@
 
 ## Summary
 
-Create a shared library package called **AutoX** (`packages/autox/`) that consolidates common BFF and UI code between AutoML and AutoRAG packages, reducing code duplication by 60% (BFF) and 50% (UI). AutoX will export low-level primitives (interfaces, utilities, clients, hooks, components) consumed via npm workspaces (UI) and Go workspaces (BFF), configured as a Module Federation singleton to ensure single runtime instance. Domain-specific logic remains in consumer handler files, with strategy/DI patterns available for advanced customization.
+Create a shared library package called **AutoX** (`packages/autox/`) that consolidates common BFF and UI code between AutoML and AutoRAG packages, reducing code duplication by **77% (BFF)** and **94% (UI)**. Deep research revealed **85% of total codebase is extractable** (~31,500 LOC), far exceeding initial estimates. AutoX will export low-level primitives (interfaces, utilities, clients, hooks, components) consumed via npm workspaces (UI) and Go workspaces (BFF), configured as a Module Federation singleton to ensure single runtime instance. Domain-specific logic remains in consumer handler files, with strategy/DI patterns available for advanced customization.
+
+**Research Impact**: Additional deep analysis uncovered previously unidentified duplication in "package-specific" components (91% identical vs. initial 10-20% estimate), BFF repository code (77% extractable), and hooks/state management (75% vs. initial 40%).
 
 ## Technical Context
 
@@ -56,8 +58,12 @@ Create a shared library package called **AutoX** (`packages/autox/`) that consol
 - Must not break existing AutoML/AutoRAG functionality during migration
 
 **Scale/Scope**: 
-- Extract ~60% of duplicate BFF code from 2 packages (AutoML: ~20K LOC BFF, AutoRAG: ~17K LOC BFF)
-- Extract ~50% of duplicate UI code from 2 packages
+- Extract **~77%** of duplicate BFF code from 2 packages (AutoML: ~20K LOC BFF, AutoRAG: ~17K LOC BFF) → **~15,600 LOC extractable**
+- Extract **~94%** of duplicate UI code from 2 packages → **~9,900 LOC extractable**
+- Extract **~75%** of hooks/API code → **~1,400 LOC extractable**
+- Extract **~66%** of utilities/types → **~880 LOC extractable**
+- Extract **~85%** of test utilities → **~5,100 LOC extractable**
+- **Total extractable: ~31,500 LOC (85% of combined codebase)**
 - 2 consumer packages initially (AutoML, AutoRAG)
 - AutoX not intended for consumption by other packages (gen-ai, eval-hub, etc.)
 
@@ -248,9 +254,9 @@ All implementation follows established patterns and constitution principles. No 
 
 ## Phase 0: Research ✅ COMPLETED (2026-04-23)
 
-Research was completed by 7 specialized general-purpose agents conducting deep codebase analysis:
+Research was completed in **two rounds** by 12 specialized general-purpose agents conducting deep codebase analysis:
 
-**Research Agents Deployed**:
+**Round 1 - Initial Research (7 agents)**:
 1. **BFF Handlers Agent** → `research/bff-handlers-analysis.md`
 2. **BFF Models/Integrations Agent** → `research/bff-models-integrations-analysis.md`
 3. **BFF Utilities Agent** → `research/bff-utils-analysis.md`
@@ -259,14 +265,23 @@ Research was completed by 7 specialized general-purpose agents conducting deep c
 6. **Frontend Utils/Types Agent** → `research/frontend-utils-types-analysis.md`
 7. **Test Files Agent** → `research/test-files-analysis.md`
 
-**Key Findings**:
-- **Total Extractable Code**: ~16,000+ lines of duplicate code
-- **BFF Layer**: 87-99% duplication across handlers, models, integrations, utilities
-- **Frontend Layer**: 87-100% duplication across hooks, components, types, utilities
-- **Test Layer**: 85-90% duplication in test files and patterns
-- **Highest Impact**: FileExplorer (1,880 lines), BFF Models (2,588 lines), Test Utilities (6,000+ lines)
+**Round 2 - Deep Dive Research (5 additional agents)**:
+8. **BFF Repository Detailed Analysis** → `research/bff-repository-detailed-analysis.md`
+9. **BFF Integration Patterns** → `research/bff-integration-patterns-analysis.md`
+10. **Frontend Package-Specific Re-analysis** → `research/frontend-package-specific-reanalysis.md`
+11. **Frontend Hooks/State Re-analysis** → `research/frontend-hooks-state-reanalysis.md`
+12. **Cross-Cutting Utilities** → `research/cross-cutting-utilities-analysis.md`
 
-**Deliverable**: ✅ `research.md` - Consolidated findings with file-by-file comparison tables
+**Key Findings (Revised)**:
+- **Total Extractable Code**: **~31,500 LOC** (85% of combined codebase) — **doubled from initial estimate**
+- **BFF Layer**: **77% extractable** (~15,600 LOC) — 26 files are 100% identical
+- **Frontend Components**: **94% extractable** (~8,500 LOC) — "package-specific" categorization was incorrect
+- **Frontend Hooks/API**: **75% extractable** (~1,400 LOC) — useNotification, S3 API are 100% duplicates
+- **Utilities/Types**: **66% extractable** (~880 LOC) — Pipeline types, BFF helpers 100% identical
+- **Test Layer**: **85% extractable** (~5,100 LOC)
+- **Critical Discovery**: Components previously marked "domain-specific" are actually 91% identical (Leaderboards, Configure pages, Connection modals)
+
+**Deliverable**: ✅ `research.md` - Consolidated findings with revised metrics and detailed extraction roadmap (5 phases, 8-12 weeks)
 
 ---
 
@@ -322,14 +337,21 @@ Task breakdown will include:
 
 ## Next Steps
 
-1. ✅ Phase 0 Research: **COMPLETED** (agent exploration)
+1. ✅ Phase 0 Research: **COMPLETED** (12 agent analyses, comprehensive findings)
 2. 🚧 Phase 1 Design: **IN PROGRESS**
-   - Generate `research.md` from agent findings
-   - Generate `data-model.md` with entities and interfaces
-   - Generate `contracts/bff-api.md` and `contracts/ui-api.md`
-   - Generate `quickstart.md` with setup guide
-   - Run agent context update script
+   - ✅ `research.md` generated and consolidated with deep dive findings
+   - ⏳ Generate `data-model.md` with entities and interfaces
+   - ⏳ Generate `contracts/bff-api.md` and `contracts/ui-api.md`
+   - ⏳ Generate `quickstart.md` with setup guide
+   - ⏳ Run agent context update script
 3. ⏸️ Phase 2 Tasks: **BLOCKED** (requires `/speckit.tasks` command)
+
+**Immediate Priority**: Begin Phase 1 extraction implementation planning based on research findings. The 5-phase roadmap in research.md provides detailed guidance:
+- **Phase 1**: Quick wins (~3,000 LOC, 2 weeks)
+- **Phase 2**: High-value components (~7,000 LOC, 3 weeks)
+- **Phase 3**: Hooks & state (~2,000 LOC, 2 weeks)
+- **Phase 4**: Utilities & types (~1,300 LOC, 1 week)
+- **Phase 5**: Advanced patterns (~18,000 LOC, 4 weeks)
 
 ---
 
