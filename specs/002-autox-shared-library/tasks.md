@@ -2,8 +2,8 @@
 
 **Feature Branch**: `002-autox-shared-library`  
 **Generated**: 2026-04-23  
-**Total Tasks**: 89  
-**Estimated Effort**: 350 hours (8-12 weeks with 2-3 developers)
+**Total Tasks**: 199  
+**Estimated Effort**: 357 hours (8-12 weeks with 2-3 developers)
 
 ---
 
@@ -105,11 +105,11 @@ Polish Phase (T083-T089)
 
 ## Phase 1: Setup
 
-**Goal**: Create AutoX package structure and establish build/test infrastructure
+**Goal**: Create AutoX package structure, establish build/test infrastructure, and produce Phase 1 documentation deliverables
 
-**Duration**: 4-6 hours  
+**Duration**: 8-12 hours  
 **Dependencies**: None  
-**Deliverable**: Compilable AutoX package with passing empty tests
+**Deliverable**: Compilable AutoX package with passing empty tests, complete documentation (data-model.md, contracts, quickstart.md)
 
 ### Tasks
 
@@ -124,8 +124,13 @@ Polish Phase (T083-T089)
 - [ ] T009 [P] Create packages/autox/README.md with package overview and usage guide
 - [ ] T010 [P] Create packages/autox/frontend/src directory structure (hooks/, components/, utils/, types/)
 - [ ] T011 Run npm install from repo root to link AutoX via npm workspaces
+- [ ] T011a Create specs/002-autox-shared-library/data-model.md documenting key entities, interfaces, and relationships from spec
+- [ ] T011b Create specs/002-autox-shared-library/contracts/bff-api.md documenting all BFF exported interfaces, models, and utilities
+- [ ] T011c Create specs/002-autox-shared-library/contracts/ui-api.md documenting all UI exported hooks, components, and types
+- [ ] T011d Create specs/002-autox-shared-library/quickstart.md with developer setup guide, import patterns, and testing strategy
+- [ ] T011e Run .specify/scripts/bash/update-agent-context.sh claude to update agent knowledge with AutoX package
 
-**Independent Test**: Package structure exists, TypeScript and Go compilation succeed with no errors
+**Independent Test**: Package structure exists, TypeScript and Go compilation succeed with no errors, all documentation deliverables created
 
 ---
 
@@ -288,6 +293,7 @@ Polish Phase (T083-T089)
 - [ ] T091 [US2] Update packages/autorag/frontend to compose FileExplorer with AutoRAG-specific navigation
 - [ ] T092 [US2] Run npm run type-check from packages/automl/frontend and packages/autorag/frontend
 - [ ] T093 [US2] Run npm test from packages/autox/frontend to verify all AutoX tests pass
+- [ ] T093a [US2] Generate coverage report (npm test -- --coverage) and verify ≥80% overall coverage and 100% for critical utilities (fail if thresholds not met)
 - [ ] T094 [US2] Start dev server (npm run dev) and manually verify AutoML/AutoRAG features work with AutoX primitives
 
 **US2 Independent Test**:
@@ -533,6 +539,8 @@ Polish Phase (T083-T089)
 - [ ] T189 Perform manual E2E testing of AutoRAG features using AutoX
 - [ ] T190 Generate bundle size report and verify AutoX singleton reduces duplication
 - [ ] T191 Run final git diff to verify total LOC reduction (~31,500 LOC target)
+- [ ] T191a Verify SC-002 threshold: Calculate BFF LOC reduction percentage and confirm ≥60% (compare AutoML+AutoRAG BFF before/after extraction to AutoX BFF)
+- [ ] T191b Verify SC-003 threshold: Calculate UI LOC reduction percentage and confirm ≥50% (compare AutoML+AutoRAG frontend before/after extraction to AutoX frontend)
 
 **Polish Phase Test**:
 - ✅ All documentation up-to-date and accurate
@@ -690,7 +698,7 @@ Polish Phase (T083-T089)
 
 ---
 
-**Total Tasks**: 191  
+**Total Tasks**: 199  
 **Parallelizable Tasks**: 68 (marked with `[P]`)  
 **Sequential Dependencies**: Clearly marked in phase dependencies  
 **Estimated Completion**: 8-12 weeks with 2-3 developers working full-time

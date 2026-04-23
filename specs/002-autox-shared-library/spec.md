@@ -120,6 +120,8 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 2. **Given** duplicate UI hooks exist, **When** they are moved to AutoX primitives, **Then** both packages compose them and functionality is preserved
 3. **Given** shared logic is identified, **When** it's evaluated for extraction, **Then** it meets the criteria (high duplication, stable interface, no excessive customization needed)
 
+**Note**: See `research.md` for exhaustive analysis of ~31,500 LOC extractable code across 5 phases with detailed file-by-file extraction roadmap.
+
 ---
 
 ### Edge Cases
@@ -161,7 +163,7 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 
 ### Functional Requirements
 
-- **FR-001**: AutoX package MUST be created under `odh-dashboard/packages/autox` with both `frontend/` and `bff/` subdirectories following standard monorepo package structure: `autox/frontend/src/{hooks,components,utils,types}` for UI and `autox/bff/internal/{api,models,utils}` for BFF (consistent with existing packages like gen-ai, automl, autorag). BFF uses only `internal/` directory (no `pkg/`) since AutoX is monorepo-internal and consumed only by AutoML and AutoRAG within the same module
+- **FR-001**: AutoX package MUST be created under `odh-dashboard/packages/autox` with both `frontend/` and `bff/` subdirectories following standard monorepo package structure: `autox/frontend/src/{hooks,components,utils,types}` for UI and `autox/bff/internal/{api,models,integrations,utils}` for BFF (consistent with existing packages like gen-ai, automl, autorag). BFF uses only `internal/` directory (no `pkg/`) since AutoX is monorepo-internal and consumed only by AutoML and AutoRAG within the same module
 
 - **FR-002**: AutoX BFF MUST export shared interfaces, utilities, and clients that are consumed by AutoML and AutoRAG BFF layers
 
@@ -171,13 +173,13 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 
 - **FR-005**: AutoX MUST support strategy patterns and dependency injection for advanced customization scenarios where handler files are insufficient
 
-- **FR-006**: AutoX MUST prioritize most reusable logic first: low-level interfaces → utilities → clients → services
+- **FR-006**: AutoX MUST prioritize most reusable logic first: low-level interfaces → utilities → clients → services. Extraction follows 5-phase roadmap detailed in research.md: Phase 1 (perfect duplicates), Phase 2 (high-value components), Phase 3 (hooks/state), Phase 4 (utilities/types), Phase 5 (advanced patterns)
 
-- **FR-007**: Before exporting a complete service from AutoX, research MUST be conducted to ensure high duplication exists currently and for the foreseeable future, and that the complexity of DI is justified
+- **FR-007**: Before exporting a complete service from AutoX, research MUST be conducted to ensure high duplication exists (≥80% code reuse) currently and for the foreseeable future, and that the complexity of DI is justified
 
 - **FR-008**: AutoX UI MUST be configured as a federated shared dependency (not a remote) in the webpack Module Federation config of both AutoML and AutoRAG with `singleton: true` and `requiredVersion` to ensure single runtime instance and automatic version resolution
 
-- **FR-009**: AutoX MUST NOT contain monolithic shared components with extensive prop variants - all shared components MUST be low-level primitives focused on single responsibility and composability. Components should be composable building blocks without strict prop limits, but avoid "kitchen sink" designs that handle multiple unrelated concerns
+- **FR-009**: AutoX MUST NOT contain monolithic shared components with extensive prop variants - all shared components MUST be low-level primitives focused on single responsibility and composability. Components with >10 props or handling >2 unrelated concerns require justification and may indicate the need for decomposition. Components should be composable building blocks, but avoid "kitchen sink" designs (e.g., a single component handling both data fetching AND rendering AND validation AND error handling)
 
 - **FR-010**: Repository MUST use npm workspaces at the root to link AutoX, AutoML, and AutoRAG UI packages for local development
 
@@ -209,11 +211,15 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 
 ### Measurable Outcomes
 
+**Note**: Success criteria are categorized as:
+- **Buildable/Verifiable** (SC-001, SC-002, SC-003, SC-006, SC-007, SC-008): Can be verified during implementation via automated tests or measurements
+- **Post-Launch Outcome Metrics** (SC-004, SC-005, SC-009, SC-010): Require user research, telemetry, or post-deployment measurement
+
 - **SC-001**: Developers can import and use AutoX utilities in AutoML or AutoRAG with zero configuration beyond initial workspace setup
 
-- **SC-002**: Code duplication between AutoML and AutoRAG BFF layers is reduced by at least 60% (measured by lines of code similarity analysis)
+- **SC-002**: Code duplication between AutoML and AutoRAG BFF layers is reduced by at least 60% (measured by: count LOC in AutoML BFF + AutoRAG BFF before extraction, count LOC removed from both packages after extraction to AutoX, calculate reduction % = removed LOC / total original LOC)
 
-- **SC-003**: Code duplication between AutoML and AutoRAG UI layers is reduced by at least 50% (measured by lines of code similarity analysis)
+- **SC-003**: Code duplication between AutoML and AutoRAG UI layers is reduced by at least 50% (measured by: count LOC in AutoML frontend + AutoRAG frontend before extraction, count LOC removed from both packages after extraction to AutoX, calculate reduction % = removed LOC / total original LOC)
 
 - **SC-004**: Development environment setup time is reduced to under 5 minutes (single `npm install` from repo root links all packages)
 
