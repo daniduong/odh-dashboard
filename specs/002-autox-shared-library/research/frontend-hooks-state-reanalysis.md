@@ -39,20 +39,18 @@ After detailed analysis of ~1,719 LOC in AutoML and ~1,640 LOC in AutoRAG (hooks
 | **API Call** | `uploadFileToS3(hostPath, params, file)` | `uploadFileToS3(hostPath, params, file)` | ✅ Identical |
 | **Error Handling** | FormData + restCREATE | FormData + restCREATE | ✅ Same pattern |
 
-**Extraction:** Create `useS3FileUploadMutation(namespace, hostPath?)` factory
+**Extraction:** Parameterized hook (no factory needed)
 
 ```typescript
 // @autox-shared/hooks/mutations/useS3FileUploadMutation.ts
-export function createS3FileUploadMutation(namespace: string) {
-  return function useS3FileUploadMutation(hostPath = '') {
-    return useMutation({
-      mutationKey: [namespace, 's3FileUpload'],
-      mutationFn: async (variables) => {
-        const { file, ...params } = variables;
-        return uploadFileToS3(hostPath, params, file);
-      },
-    });
-  };
+export function useS3FileUploadMutation(hostPath = '') {
+  return useMutation({
+    mutationKey: ['s3FileUpload'],
+    mutationFn: async (variables) => {
+      const { file, ...params } = variables;
+      return uploadFileToS3(hostPath, params, file);
+    },
+  });
 }
 ```
 
@@ -71,29 +69,26 @@ export function createS3FileUploadMutation(namespace: string) {
 | **Error Handling** | `postPipelineRunAction` helper | `postPipelineRunAction` helper | ✅ Identical (lines 33-50) |
 | **URL Pattern** | `/api/v1/pipeline-runs/{id}/{action}` | `/api/v1/pipeline-runs/{id}/{action}` | ✅ Same |
 
-**Extraction:** Create shared mutation factory
+**Extraction:** Parameterized hooks (no factory needed)
 
 ```typescript
 // @autox-shared/hooks/mutations/usePipelineRunActions.ts
-export function createPipelineRunActions(namespace: string) {
-  async function postPipelineRunAction(url: string, action: string) {
-    // Shared 17-line implementation
-  }
+async function postPipelineRunAction(url: string, action: string) {
+  // Shared 17-line implementation
+}
 
-  return {
-    useTerminatePipelineRunMutation(ns: string, runId: string) {
-      return useMutation({
-        mutationKey: [namespace, 'terminatePipelineRun', runId],
-        mutationFn: () => postPipelineRunAction(url, 'terminate'),
-      });
-    },
-    useRetryPipelineRunMutation(ns: string, runId: string) {
-      return useMutation({
-        mutationKey: [namespace, 'retryPipelineRun', runId],
-        mutationFn: () => postPipelineRunAction(url, 'retry'),
-      });
-    },
-  };
+export function useTerminatePipelineRunMutation(ns: string, runId: string) {
+  return useMutation({
+    mutationKey: ['terminatePipelineRun', runId],
+    mutationFn: () => postPipelineRunAction(url, 'terminate'),
+  });
+}
+
+export function useRetryPipelineRunMutation(ns: string, runId: string) {
+  return useMutation({
+    mutationKey: ['retryPipelineRun', runId],
+    mutationFn: () => postPipelineRunAction(url, 'retry'),
+  });
 }
 ```
 
@@ -112,28 +107,26 @@ export function createPipelineRunActions(namespace: string) {
 | **Validation** | Zod schema with 10 fields | Zod schema with 10 fields | ✅ Same fields |
 | **Error Handling** | `isModArchResponse<PipelineRun>` | `isModArchResponse<PipelineRun>` | ✅ Identical |
 
-**Extraction:** Generic mutation with type parameter
+**Extraction:** Parameterized hook with type parameter
 
 ```typescript
 // @autox-shared/hooks/mutations/useCreatePipelineRunMutation.ts
-export function createPipelineRunMutation<TPayload>(
-  namespace: string,
+export function useCreatePipelineRunMutation<TPayload>(
+  ns: string,
   responseSchema: z.ZodSchema<PipelineRun>,
 ) {
-  return function useCreatePipelineRunMutation(ns: string) {
-    return useMutation({
-      mutationKey: [namespace, 'pipelineRun'],
-      mutationFn: async (payload: TPayload) => {
-        const response = await handleRestFailures(
-          restCREATE('', `${URL_PREFIX}/api/${BFF_API_VERSION}/pipeline-runs?namespace=${ns}`, payload)
-        );
-        if (isModArchResponse<PipelineRun>(response)) {
-          return responseSchema.parse(response.data);
-        }
-        throw new Error('Invalid response format');
-      },
-    });
-  };
+  return useMutation({
+    mutationKey: ['pipelineRun', ns],
+    mutationFn: async (payload: TPayload) => {
+      const response = await handleRestFailures(
+        restCREATE('', `${URL_PREFIX}/api/${BFF_API_VERSION}/pipeline-runs?namespace=${ns}`, payload)
+      );
+      if (isModArchResponse<PipelineRun>(response)) {
+        return responseSchema.parse(response.data);
+      }
+      throw new Error('Invalid response format');
+    },
+  });
 }
 ```
 
@@ -164,7 +157,7 @@ AutoRAG has `useUploadToStorageMutation` (lines 115-187, 73 LOC) that uses `XMLH
 | **Placeholder Data** | `placeholderData: (prev) => prev` | `placeholderData: (prev) => prev` | ✅ Same |
 | **Refetch Interval** | Conditional on terminal state | Conditional on terminal state | ✅ Same |
 
-**Extraction:** Shared query factory
+**Extraction:** Parameterized query (no factory needed)
 
 ```typescript
 // @autox-shared/hooks/queries/usePipelineRunQuery.ts
@@ -172,20 +165,18 @@ const TERMINAL_STATES = new Set(['SUCCEEDED', 'FAILED', 'CANCELED', 'SKIPPED', '
 export const isTerminalState = (state: string) => TERMINAL_STATES.has(state);
 const POLL_INTERVAL_MS = 10000;
 
-export function createPipelineRunQuery(namespace: string) {
-  return function usePipelineRunQuery(runId?: string, ns?: string) {
-    return useQuery({
-      queryKey: [namespace, 'pipelineRun', runId, ns],
-      queryFn: ({ signal }) => getPipelineRunFromBFF('', runId!, ns!, { signal }),
-      enabled: !!runId && !!ns,
-      placeholderData: (previousData) => previousData,
-      refetchInterval: (query) => {
-        const state = query.state.data?.state;
-        if (!state || isTerminalState(state)) return false;
-        return POLL_INTERVAL_MS;
-      },
-    });
-  };
+export function usePipelineRunQuery(runId?: string, ns?: string) {
+  return useQuery({
+    queryKey: ['pipelineRun', runId, ns],
+    queryFn: ({ signal }) => getPipelineRunFromBFF('', runId!, ns!, { signal }),
+    enabled: !!runId && !!ns,
+    placeholderData: (previousData) => previousData,
+    refetchInterval: (query) => {
+      const state = query.state.data?.state;
+      if (!state || isTerminalState(state)) return false;
+      return POLL_INTERVAL_MS;
+    },
+  });
 }
 ```
 
@@ -205,22 +196,20 @@ export function createPipelineRunQuery(namespace: string) {
 | **API Call** | `getS3Files('', {signal}, {namespace, path})` | `getS3Files('', {signal}, {namespace, path})` | ✅ Identical |
 | **Error Handling** | `retry: false` | `retry: false` | ✅ Same |
 
-**Extraction:** Factory with namespace prefix
+**Extraction:** Parameterized query (no factory needed)
 
 ```typescript
 // @autox-shared/hooks/queries/useS3ListFilesQuery.ts
-export function createS3ListFilesQuery(namespace: string) {
-  return function useS3ListFilesQuery(ns?: string, path?: string) {
-    return useQuery({
-      queryKey: [namespace, 's3Files', ns, path],
-      queryFn: async ({ signal }) => {
-        if (!ns || !path) throw new Error('namespace and path are required');
-        return getS3Files('', { signal }, { namespace: ns, path });
-      },
-      enabled: Boolean(ns && path),
-      retry: false,
-    });
-  };
+export function useS3ListFilesQuery(ns?: string, path?: string) {
+  return useQuery({
+    queryKey: ['s3Files', ns, path],
+    queryFn: async ({ signal }) => {
+      if (!ns || !path) throw new Error('namespace and path are required');
+      return getS3Files('', { signal }, { namespace: ns, path });
+    },
+    enabled: Boolean(ns && path),
+    retry: false,
+  });
 }
 ```
 
@@ -308,18 +297,19 @@ AutoRAG has three unique queries:
 
 **Difference:** AutoML imports `DEFAULT_PAGE_SIZE` from `const.ts`, AutoRAG defines it inline (20).
 
-**Extraction:** Shared pagination hook
+**Extraction:** Shared pagination hook (no factory needed)
 
 ```typescript
 // @autox-shared/hooks/usePipelineRuns.ts
-export function createPipelineRunsHook(
-  namespace: string,
-  getPipelineRuns: typeof getPipelineRunsFromBFF,
+export function usePipelineRuns(
+  ns: string,
   options?: { defaultPageSize?: number; pollInterval?: number }
-) {
-  return function usePipelineRuns(ns: string): PipelineRunsResult {
-    // Full 104-line implementation (shared)
-  };
+): PipelineRunsResult {
+  const DEFAULT_PAGE_SIZE = options?.defaultPageSize ?? 20;
+  const POLL_INTERVAL = options?.pollInterval ?? 10000;
+  
+  // Full 104-line implementation (shared)
+  // Uses getPipelineRunsFromBFF directly from shared API
 }
 ```
 
@@ -565,11 +555,16 @@ export function createResultsContext<TResult, TParams>() {
 
 ```typescript
 // packages/automl/context/AutomlResultsContext.ts
-const { ResultsContext: AutomlResultsContext, useResultsContext: useAutomlResultsContext, getContext } = 
+import { createResultsContext } from '@autox-shared/context/ResultsContext';
+import type { AutomlModel } from '../types';
+import type { ConfigureSchema } from '../schemas';
+
+const { ResultsContext, useResultsContext, getContext } = 
   createResultsContext<AutomlModel, ConfigureSchema>();
 
-export { AutomlResultsContext, useAutomlResultsContext };
-export const getAutomlContext = getContext; // Wrap with task_type logic
+export const AutomlResultsContext = ResultsContext;
+export const useAutomlResultsContext = useResultsContext;
+export const getAutomlContext = getContext; // Can wrap with task_type logic if needed
 ```
 
 **LOC Saved:** ~50 lines × 2 modules = 100 LOC
@@ -584,52 +579,41 @@ Both have `AppContext.ts` but they're minimal wrappers around `mod-arch-core`. K
 
 ## 4. Shared Pattern Identification
 
-### 4.1 React Query Factories
+### 4.1 React Query Hook Pattern
 
-**Pattern:** All hooks follow a consistent factory pattern
+**Pattern:** All hooks use simple parameterization instead of factory functions
 
 ```typescript
-// Pattern 1: Query with namespace prefix
-function createQuery(namespace: string) {
-  return function useQuery(...) {
-    return useQuery({
-      queryKey: [namespace, ...args],
-      queryFn: ...,
-    });
-  };
+// Parameterized hook - accepts configuration as parameters
+export function useS3FileUploadMutation(hostPath = '') {
+  return useMutation({
+    mutationKey: ['s3FileUpload'],
+    mutationFn: async (variables) => {
+      const { file, ...params } = variables;
+      return uploadFileToS3(hostPath, params, file);
+    },
+  });
 }
 
-// Pattern 2: Mutation with namespace prefix
-function createMutation(namespace: string) {
-  return function useMutation(...) {
-    return useMutation({
-      mutationKey: [namespace, ...args],
-      mutationFn: ...,
-    });
-  };
+// Another example - query with namespace parameter
+export function usePipelineRunQuery(runId?: string, ns?: string) {
+  return useQuery({
+    queryKey: ['pipelineRun', runId, ns],
+    queryFn: ({ signal }) => getPipelineRunFromBFF('', runId!, ns!, { signal }),
+    enabled: !!runId && !!ns,
+  });
 }
 ```
 
-**Extraction:** Create factory utilities
+**Key Principle:** If hooks perform the same operation with different configuration, use parameters to differentiate behavior instead of creating factory functions or separate named hooks.
 
-```typescript
-// @autox-shared/hooks/factories.ts
-export function createQueryFactory<TData, TArgs extends any[]>(
-  namespace: string,
-  queryFn: (...args: TArgs) => Promise<TData>,
-  options?: UseQueryOptions<TData>,
-) {
-  return function useQuery(...args: TArgs) {
-    return useQuery({
-      queryKey: [namespace, ...args],
-      queryFn: () => queryFn(...args),
-      ...options,
-    });
-  };
-}
-```
+**Benefits:**
+- ✅ Simpler implementation (one hook instead of factory + wrapper)
+- ✅ More flexible (consumers can pass any configuration dynamically)
+- ✅ Better encapsulation (hook controls its own query/mutation key)
+- ✅ Easier to maintain (single source of truth for logic)
 
-**LOC Saved:** Reduces boilerplate across all queries (~50 LOC)
+**LOC Saved:** Eliminates factory wrapper overhead (~50 LOC across all hooks)
 
 ---
 
@@ -789,7 +773,8 @@ No extraction needed - already shared via `mod-arch-core`.
 | **useNamespaces** | 30 | Low | Low |
 | **Error handling utils** | 48 | Low | Medium |
 | **Zod validation utils** | 40 | Low | Medium |
-| **Factory patterns** | 50 | Medium | High - reduces future duplication |
+| **Response transformers** | 30 | Low | Medium |
+| **Additional utilities** | 20 | Low | Medium |
 | **Total** | **410 LOC** | | |
 
 ### Priority 3: Future Extractions (200+ LOC)
@@ -798,8 +783,8 @@ No extraction needed - already shared via `mod-arch-core`.
 |-----------|-----------|------------|-------|
 | **fetchS3Json** | 68 (34×2) | Medium | Generic JSON fetcher |
 | **getNamespaces** | 36 | Low | K8s utility |
-| **Response transformers** | 30 | Low | Future-proofing |
-| **Query factories** | 50 | Medium | Reduces boilerplate |
+| **Additional type guards** | 30 | Low | Type safety utilities |
+| **Module-specific adapters** | 50 | Low | Domain-specific wrappers |
 | **Total** | **184 LOC** | | |
 
 ---
@@ -817,8 +802,7 @@ No extraction needed - already shared via `mod-arch-core`.
 | **API - Pipelines** | 65 | pipelines.ts | Shared pipeline endpoints |
 | **API - K8s** | 18 | k8s.ts | getNamespaces |
 | **Context** | 60 | Results context factory | Generic context pattern |
-| **Utilities** | 140 | Error handling, validation, transformers | Shared patterns |
-| **Factory Patterns** | 100 | Query/mutation factories | Boilerplate reduction |
+| **Utilities** | 240 | Error handling, validation, transformers, fetchS3Json | Shared patterns and helpers |
 | **Types** | 80 | Shared types | PipelineRun, S3 types, etc. |
 | **Total Extracted** | **~1,408 LOC** | | |
 
@@ -835,9 +819,9 @@ No extraction needed - already shared via `mod-arch-core`.
 **Conclusion:** The re-analysis reveals **27% more extraction potential** than initially estimated, primarily due to:
 
 1. Discovery of 100% duplicate utilities (useNotification, S3 API)
-2. Identical mutation patterns across both modules
+2. Identical mutation patterns across both modules (simple parameterization)
 3. Shared error handling and validation logic
-4. Factory pattern opportunities
+4. Consistent hook patterns that extract cleanly
 
 ---
 
@@ -858,7 +842,7 @@ Extract utilities with **zero dependencies** on module-specific code:
 
 ### Phase 2: Mutations & Queries (Week 2)
 
-Extract React Query hooks with namespace parameterization:
+Extract React Query hooks as parameterized functions (no factories):
 
 1. ✅ **S3 upload mutation** - 22 LOC
 2. ✅ **Pipeline action mutations** - 166 LOC
@@ -879,13 +863,13 @@ Extract hooks with complex state management:
 
 **Total:** ~454 LOC, requires careful testing
 
-### Phase 4: Factories & Future-Proofing (Week 4)
+### Phase 4: Utilities & Future-Proofing (Week 4)
 
-Extract patterns to reduce future duplication:
+Extract additional utilities to reduce future duplication:
 
-1. ✅ **Query factories** - 50 LOC
-2. ✅ **fetchS3Json** - 68 LOC
-3. ✅ **Response transformers** - 30 LOC
+1. ✅ **fetchS3Json** - 68 LOC
+2. ✅ **Response transformers** - 30 LOC
+3. ✅ **Additional shared utilities** - 50 LOC
 
 **Total:** ~148 LOC, architectural improvement
 
@@ -896,8 +880,8 @@ Extract patterns to reduce future duplication:
 ### Low Risk (Phases 1-2)
 
 - **Pure utilities** (useNotification, S3 API) - stateless, no side effects
-- **Simple queries** - straightforward namespace parameterization
-- **Mutations** - already using factory pattern
+- **Simple queries** - straightforward parameterization
+- **Mutations** - simple parameterized hooks
 
 **Mitigation:** Unit tests + integration tests
 
@@ -911,15 +895,15 @@ Extract patterns to reduce future duplication:
 - Comprehensive test coverage
 - Gradual rollout (AutoML first, then AutoRAG)
 
-### High Risk (Phase 4)
+### Low Risk (Phase 4)
 
-- **Factory patterns** - requires refactoring consumer code
-- **Type system changes** - may affect downstream code
+- **Additional utilities** - simple extraction of helper functions
+- **Type system improvements** - better type safety
 
 **Mitigation:**
-- Feature flags
-- Backward compatibility layer
-- Extended testing period
+- Comprehensive unit tests
+- Type checking across modules
+- Integration testing
 
 ---
 
@@ -937,20 +921,31 @@ Each extracted component needs:
 ```typescript
 describe('useS3FileUploadMutation', () => {
   it('should upload file successfully', async () => {
-    const mutation = useS3FileUploadMutation('automl');
-    const result = await mutation.mutateAsync({
+    const { result } = renderHook(() => useS3FileUploadMutation('/api/automl'));
+    
+    const uploadResult = await result.current.mutateAsync({
       file: mockFile,
       namespace: 'test',
       secretName: 'aws-secret',
       key: 'path/to/file.csv',
     });
-    expect(result.uploaded).toBe(true);
-    expect(result.key).toBe('path/to/file.csv');
+    
+    expect(uploadResult.uploaded).toBe(true);
+    expect(uploadResult.key).toBe('path/to/file.csv');
   });
 
   it('should handle upload errors', async () => {
+    const { result } = renderHook(() => useS3FileUploadMutation('/api/automl'));
+    
     // Mock fetch to return 500
-    await expect(mutation.mutateAsync(...)).rejects.toThrow('Failed to upload');
+    await expect(
+      result.current.mutateAsync({
+        file: mockFile,
+        namespace: 'test',
+        secretName: 'aws-secret',
+        key: 'path/to/file.csv',
+      })
+    ).rejects.toThrow('Failed to upload');
   });
 });
 ```
@@ -977,20 +972,20 @@ Test that AutoML/AutoRAG still work after migration:
 2. **S3 and pipelines APIs are 100% duplicates**
 3. **useNotification is byte-for-byte identical** (334 LOC)
 4. **usePipelineRuns is identical except constant import** (208 LOC)
-5. **All mutations follow the same pattern** - easy to extract
+5. **All mutations/queries use simple parameterization** - easy to extract
 6. **Error handling and validation logic is duplicated 6+ times**
-7. **Factory patterns can eliminate future duplication**
+7. **No factory functions needed** - parameterized hooks are simpler and more flexible
 
 **Total Extraction Potential:** **~1,400 LOC** (65-75% of hooks/API/context)
 
 **Recommended First Steps:**
 
 1. **Week 1:** Extract utilities (useNotification, S3 API, error handling)
-2. **Week 2:** Extract mutations and simple queries
+2. **Week 2:** Extract mutations and simple queries as parameterized hooks
 3. **Week 3:** Extract complex hooks (usePipelineRuns) and contexts
-4. **Week 4:** Introduce factory patterns to prevent future duplication
+4. **Week 4:** Extract additional utilities and finalize shared library
 
-**Risk Level:** **Low-Medium** (most code is pure functions or simple hooks)
+**Risk Level:** **Low** (most code is pure functions or simple parameterized hooks)
 
 **Estimated Effort:** **2-3 weeks** for phases 1-3, 1 week for phase 4
 
@@ -1003,7 +998,7 @@ Test that AutoML/AutoRAG still work after migration:
 3. **Set up `@autox-shared` package** with proper tooling
 4. **Begin Phase 1 extractions** (low-risk utilities)
 5. **Write migration guide** for future modules
-6. **Document factory patterns** for long-term maintenance
+6. **Document parameterization patterns** for long-term maintenance
 
 ---
 

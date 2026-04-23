@@ -204,21 +204,34 @@ All component pairs follow identical patterns:
 | Pipeline run query (polling) | 100% | 36 |
 | S3 list files query | 95% | 46 |
 
-**Total**: ~346 LOC with namespace parameterization
+**Total**: ~346 LOC with simple parameterization
 
 #### 3.3 Shared Patterns
 
-**React Query Factories** - All hooks follow identical factory pattern:
+**Parameterized Hooks** - All hooks use simple parameterization instead of factories:
 ```typescript
-function create{Hook}(namespace: string) {
-  return function use{Hook}(...) {
-    return useQuery/useMutation({
-      queryKey: [namespace, ...],
-      queryFn: ...,
-    });
-  };
+// Example: S3 file upload mutation
+export function useS3FileUploadMutation(hostPath = '') {
+  return useMutation({
+    mutationKey: ['s3FileUpload'],
+    mutationFn: async (variables) => {
+      const { file, ...params } = variables;
+      return uploadFileToS3(hostPath, params, file);
+    },
+  });
+}
+
+// Example: Pipeline run query with namespace
+export function usePipelineRunQuery(runId?: string, ns?: string) {
+  return useQuery({
+    queryKey: ['pipelineRun', runId, ns],
+    queryFn: ({ signal }) => getPipelineRunFromBFF('', runId!, ns!, { signal }),
+    enabled: !!runId && !!ns,
+  });
 }
 ```
+
+**Key Principle**: If hooks perform the same operation with different configuration, use parameters to differentiate behavior rather than creating factory functions or separate named hooks.
 
 **Error Handling** - Consistent error parsing from API responses (48 LOC duplicated 6+ times)
 
@@ -388,11 +401,11 @@ function create{Hook}(namespace: string) {
 
 **Hooks**:
 - usePipelineRuns (208 LOC)
-- Mutations (346 LOC)
-- Queries (180 LOC)
+- Mutations as parameterized hooks (346 LOC)
+- Queries as parameterized hooks (180 LOC)
 
 **Context**:
-- Results context factory (100 LOC)
+- Results context generator (100 LOC)
 
 **API**:
 - Pipeline API (110 LOC)
@@ -463,8 +476,8 @@ function create{Hook}(namespace: string) {
 ### Medium Risk Extractions (Phases 3-4)
 
 - Complex state management (usePipelineRuns)
-- Generic context factories
-- Hook patterns with dependencies
+- Generic context generators (type-parameterized)
+- Hook parameterization patterns
 
 **Mitigation**: Parallel implementation, gradual rollout
 
@@ -528,7 +541,7 @@ The research reveals **exceptional code duplication** (85% across all layers) wi
 
 1. **BFF**: 77% extractable (15,600 LOC) - far higher than expected
 2. **Components**: 94% extractable (8,500 LOC) - "package-specific" categorization was incorrect
-3. **Hooks/API**: 75% extractable (1,400 LOC) - identical patterns across packages
+3. **Hooks/API**: 75% extractable (1,400 LOC) - identical patterns with simple parameterization
 4. **Utilities**: 66% extractable (880 LOC) - byte-for-byte duplicates
 5. **Tests**: 85% extractable (5,100 LOC) - shared test infrastructure
 
