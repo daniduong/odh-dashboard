@@ -485,7 +485,7 @@ export function createAutoXRoutes(baseRoot: string, productName: string) {
 ### Recommended Structure
 
 ```
-packages/autox-shared/src/
+packages/autox/src/
 ├── types/
 │   ├── pipeline.ts         # 186 lines (pure duplicate)
 │   └── topology.ts         # 46 lines (pure duplicate)

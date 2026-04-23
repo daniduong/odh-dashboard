@@ -50,7 +50,7 @@ packages/
 │   │       ├── utils/           # Utilities
 │   │       └── types/           # TypeScript types
 │   └── bff/                     # BFF shared code
-│       └── internal/
+│       └── pkg/
 │           ├── models/          # Data models
 │           ├── integrations/    # External service clients
 │           ├── repositories/    # Business logic
@@ -307,18 +307,18 @@ module.exports = {
 
 ```go
 // Import models
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
 
 // Import integrations
-import k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/kubernetes"
-import s3 "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/s3"
-import ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/pipelineserver"
+import k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/kubernetes"
+import s3 "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/s3"
+import ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/pipelineserver"
 
 // Import repositories
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/repositories"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/repositories"
 
 // Import API utilities
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/api"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/api"
 ```
 
 ### Example 1: Using Kubernetes Client
@@ -331,9 +331,9 @@ import (
     "context"
     "net/http"
     
-    k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/kubernetes"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/api"
+    k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/kubernetes"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/api"
 )
 
 type SecretsHandler struct {
@@ -371,9 +371,9 @@ import (
     "context"
     "net/http"
     
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/repositories"
-    ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/pipelineserver"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/api"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/repositories"
+    ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/pipelineserver"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/api"
 )
 
 type PipelinesHandler struct {
@@ -413,8 +413,8 @@ import (
     "context"
     "net/http"
     
-    s3 "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/s3"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/api"
+    s3 "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/s3"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/api"
 )
 
 type S3Handler struct {
@@ -446,9 +446,9 @@ package main
 import (
     "log"
     
-    k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/kubernetes"
-    s3 "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/s3"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/repositories"
+    k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/kubernetes"
+    s3 "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/s3"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/repositories"
     "github.com/opendatahub-io/odh-dashboard/packages/automl/bff/internal/handlers"
 )
 
@@ -559,7 +559,7 @@ import (
     "net/http/httptest"
     "testing"
     
-    k8smocks "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/kubernetes/mocks"
+    k8smocks "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/kubernetes/mocks"
     corev1 "k8s.io/api/core/v1"
     metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -598,8 +598,8 @@ package internal_test
 import (
     "testing"
     
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/repositories"
-    ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/pipelineserver"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/repositories"
+    ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/pipelineserver"
 )
 
 func TestPipelineDiscovery_Integration(t *testing.T) {
@@ -661,8 +661,8 @@ export function useRAGPipelineRuns(namespace: string) {
 package handlers
 
 import (
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/repositories"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/repositories"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
 )
 
 func (h *AutoMLHandler) ValidateTimeSeriesParameters(params map[string]interface{}) error {
@@ -858,10 +858,10 @@ import { usePipelineRuns } from '@odh-dashboard/autox/hooks';
 ```go
 // ✅ After: Import from AutoX
 // packages/automl/bff/internal/handlers/runs_handler.go
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
 
 // packages/autorag/bff/internal/handlers/runs_handler.go
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
 ```
 
 #### Step 4: Delete Duplicate Files
@@ -925,18 +925,18 @@ const { data, isLoading } = usePipelineRuns({ namespace: 'default' });
 
 ```go
 // Models
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
 
 // Clients
-import k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/kubernetes"
-import s3 "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/s3"
-import ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/pipelineserver"
+import k8s "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/kubernetes"
+import s3 "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/s3"
+import ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/pipelineserver"
 
 // Repositories
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/repositories"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/repositories"
 
 // API utilities
-import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/api"
+import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/api"
 
 // Example usage
 secrets, err := k8sClient.ListSecrets(ctx, namespace, metav1.ListOptions{})

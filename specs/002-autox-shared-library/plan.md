@@ -198,7 +198,7 @@ packages/autox/
 ├── bff/                        # BFF shared code
 │   ├── go.mod                  # Go module definition
 │   ├── go.sum
-│   ├── internal/               # Internal packages (not exported outside monorepo)
+│   ├── pkg/
 │   │   ├── api/                # HTTP utilities
 │   │   │   ├── errors.go       # Standardized error responses
 │   │   │   ├── errors_test.go
@@ -241,11 +241,10 @@ The AutoX package follows the **standard ODH Dashboard monorepo package structur
 1. **Root `packages/autox/`**: Contains package metadata and top-level config
 2. **`frontend/`**: Houses all UI-related shared code (hooks, components, utils, types)
    - **Tests in `__tests__/` folders**: Each directory containing source files has a `__tests__/` subdirectory with corresponding test files (e.g., `hooks/usePipelineRuns.ts` → `hooks/__tests__/usePipelineRuns.spec.ts`)
-3. **`bff/internal/`**: Houses all BFF-related shared code (models, integrations, utils, API helpers)
+3. **`bff/pkg/`**: Houses all BFF-related shared code (models, integrations, utils, API helpers)
    - **Tests co-located**: Each `.go` file has corresponding `_test.go` file in same directory (Go convention)
 
 **Key Decisions**:
-- **BFF uses only `internal/` directory** (no `pkg/`): Simpler, sufficient for monorepo-internal sharing. AutoML/AutoRAG will import from `autox/bff/internal/*`
 - **UI barrel exports** (`index.ts` files): Provide clean public API surface while allowing internal organization flexibility
 - **Test organization**: UI tests in `__tests__/` folders (Jest convention), BFF tests as `_test.go` files (Go convention)
 - **No contracts directory in source**: Contract docs live in `specs/002-autox-shared-library/contracts/` for specification purposes

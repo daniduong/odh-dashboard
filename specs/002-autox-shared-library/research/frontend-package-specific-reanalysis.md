@@ -1022,7 +1022,7 @@ onSubmit(assembledConnection);
 
 #### Extractable Shared Code
 
-**This should be a single shared component in autox-shared:**
+**This should be a single shared component in autox:**
 
 ```typescript
 // Shared: 222 LOC (100% after normalizing onSubmit signature)
@@ -1125,19 +1125,19 @@ useEffect(() => {
 ### Priority 1: High-Impact, Low-Risk Extractions
 
 #### 1.1 Connection Modal (99% identical)
-- **Location**: `autox-shared/components/connection/`
+- **Location**: `autox/components/connection/`
 - **Savings**: 436 LOC → ~10 LOC per package
 - **Effort**: 1-2 hours
 - **File**: `AutoxConnectionModal.tsx`
 
 #### 1.2 Module Header (100% identical)
-- **Location**: `autox-shared/components/common/`
+- **Location**: `autox/components/common/`
 - **Savings**: 36 LOC → ~5 LOC per package
 - **Effort**: 30 minutes
 - **File**: `GenericModuleHeader.tsx`
 
 #### 1.3 Runs Table (98% identical)
-- **Location**: `autox-shared/components/runs/`
+- **Location**: `autox/components/runs/`
 - **Savings**: 126 LOC → ~15 LOC per package
 - **Effort**: 2-3 hours
 - **File**: `GenericRunsTable.tsx`
@@ -1145,7 +1145,7 @@ useEffect(() => {
 ### Priority 2: High-Impact, Medium-Risk Extractions
 
 #### 2.1 Configure Page (90% identical, ~800 LOC shared)
-- **Location**: `autox-shared/components/configure/`
+- **Location**: `autox/components/configure/`
 - **Savings**: 1,893 LOC → ~200 LOC per package
 - **Effort**: 1-2 days
 - **Files**:
@@ -1155,7 +1155,7 @@ useEffect(() => {
   - `FileSelectionSection.tsx`
 
 #### 2.2 Leaderboard (92% identical, ~700 LOC shared)
-- **Location**: `autox-shared/components/leaderboard/`
+- **Location**: `autox/components/leaderboard/`
 - **Savings**: 1,728 LOC → ~150 LOC per package
 - **Effort**: 2-3 days
 - **Files**:
@@ -1166,19 +1166,19 @@ useEffect(() => {
 ### Priority 3: Medium-Impact Extractions
 
 #### 3.1 Input Parameters Panel (88% identical)
-- **Location**: `autox-shared/components/results/`
+- **Location**: `autox/components/results/`
 - **Savings**: 414 LOC → ~50 LOC per package
 - **Effort**: 1 day
 - **File**: `GenericInputParametersPanel.tsx`
 
 #### 3.2 Experiment Settings Modal (95% identical)
-- **Location**: `autox-shared/components/configure/`
+- **Location**: `autox/components/configure/`
 - **Savings**: 189 LOC → ~10 LOC per package
 - **Effort**: 3-4 hours
 - **File**: `GenericExperimentSettingsModal.tsx`
 
 #### 3.3 Details Modal (85% identical)
-- **Location**: `autox-shared/components/details/`
+- **Location**: `autox/components/details/`
 - **Savings**: 927 LOC → ~140 LOC per package
 - **Effort**: 2-3 days
 - **Files**:
@@ -1226,14 +1226,14 @@ The original categorization of these components as "package-specific" was **fund
 3. **Systematic duplication** indicates copy-paste development approach
 4. **Extraction is feasible** with low-to-medium refactoring risk
 
-**Recommendation**: Immediately prioritize extraction of these components into `autox-shared`. The ROI is massive:
+**Recommendation**: Immediately prioritize extraction of these components into `autox`. The ROI is massive:
 - **Developer velocity**: Future packages get all this infrastructure for free
 - **Maintenance**: Single source of truth for common patterns
 - **Quality**: Shared components get more testing and refinement
 - **Consistency**: Guaranteed UX consistency across all AutoX packages
 
 **Next Steps**:
-1. Create `autox-shared` package structure
+1. Create `autox` package structure
 2. Start with Priority 1 extractions (high impact, low risk)
 3. Build test coverage for shared components
 4. Migrate AutoML and AutoRAG to use shared components

@@ -351,7 +351,7 @@ interface EmptyStateProps {
 ## Recommended Shared Library Structure
 
 ```text
-packages/autox-shared/
+packages/autox/
 ├── src/
 │   ├── components/
 │   │   ├── FileExplorer/
@@ -481,7 +481,7 @@ packages/autox-shared/
 ## Recommendations
 
 1. **Immediate Action:**
-   - Create `@odh-dashboard/autox-shared` package
+   - Create `@odh-dashboard/autox` package
    - Extract FileExplorer (biggest win, already flagged with TODO)
    - Extract ToastNotification (widely used primitive)
 

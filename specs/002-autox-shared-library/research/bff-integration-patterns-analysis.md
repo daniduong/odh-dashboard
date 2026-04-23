@@ -698,4 +698,4 @@ The analysis reveals **exceptional code duplication** between AutoML and AutoRAG
 3. Pipeline Server Client (~630 lines, 100% shared)
 4. HTTP Error Handling (~36 lines, 100% shared)
 
-These extractions alone would eliminate ~40% of the integration code duplication and establish a solid foundation for the `autox-shared-library`.
+These extractions alone would eliminate ~40% of the integration code duplication and establish a solid foundation for `autox`.

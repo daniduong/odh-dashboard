@@ -42,7 +42,7 @@ After detailed analysis of ~1,719 LOC in AutoML and ~1,640 LOC in AutoRAG (hooks
 **Extraction:** Parameterized hook (no factory needed)
 
 ```typescript
-// @autox-shared/hooks/mutations/useS3FileUploadMutation.ts
+// @autox/hooks/mutations/useS3FileUploadMutation.ts
 export function useS3FileUploadMutation(hostPath = '') {
   return useMutation({
     mutationKey: ['s3FileUpload'],
@@ -72,7 +72,7 @@ export function useS3FileUploadMutation(hostPath = '') {
 **Extraction:** Parameterized hooks (no factory needed)
 
 ```typescript
-// @autox-shared/hooks/mutations/usePipelineRunActions.ts
+// @autox/hooks/mutations/usePipelineRunActions.ts
 async function postPipelineRunAction(url: string, action: string) {
   // Shared 17-line implementation
 }
@@ -110,7 +110,7 @@ export function useRetryPipelineRunMutation(ns: string, runId: string) {
 **Extraction:** Parameterized hook with type parameter
 
 ```typescript
-// @autox-shared/hooks/mutations/useCreatePipelineRunMutation.ts
+// @autox/hooks/mutations/useCreatePipelineRunMutation.ts
 export function useCreatePipelineRunMutation<TPayload>(
   ns: string,
   responseSchema: z.ZodSchema<PipelineRun>,
@@ -160,7 +160,7 @@ AutoRAG has `useUploadToStorageMutation` (lines 115-187, 73 LOC) that uses `XMLH
 **Extraction:** Parameterized query (no factory needed)
 
 ```typescript
-// @autox-shared/hooks/queries/usePipelineRunQuery.ts
+// @autox/hooks/queries/usePipelineRunQuery.ts
 const TERMINAL_STATES = new Set(['SUCCEEDED', 'FAILED', 'CANCELED', 'SKIPPED', 'CACHED']);
 export const isTerminalState = (state: string) => TERMINAL_STATES.has(state);
 const POLL_INTERVAL_MS = 10000;
@@ -199,7 +199,7 @@ export function usePipelineRunQuery(runId?: string, ns?: string) {
 **Extraction:** Parameterized query (no factory needed)
 
 ```typescript
-// @autox-shared/hooks/queries/useS3ListFilesQuery.ts
+// @autox/hooks/queries/useS3ListFilesQuery.ts
 export function useS3ListFilesQuery(ns?: string, path?: string) {
   return useQuery({
     queryKey: ['s3Files', ns, path],
@@ -230,7 +230,7 @@ export function useS3ListFilesQuery(ns?: string, path?: string) {
 **Extraction:** Shared utility function
 
 ```typescript
-// @autox-shared/api/s3.ts
+// @autox/api/s3.ts
 export async function fetchS3File(
   namespace: string,
   key: string,
@@ -300,7 +300,7 @@ AutoRAG has three unique queries:
 **Extraction:** Shared pagination hook (no factory needed)
 
 ```typescript
-// @autox-shared/hooks/usePipelineRuns.ts
+// @autox/hooks/usePipelineRuns.ts
 export function usePipelineRuns(
   ns: string,
   options?: { defaultPageSize?: number; pollInterval?: number }
@@ -331,7 +331,7 @@ export function usePipelineRuns(
 **Extraction:** Shared hook (no changes needed)
 
 ```typescript
-// @autox-shared/hooks/useNotification.ts
+// @autox/hooks/useNotification.ts
 export const useNotification = () => {
   // Exact 167-line implementation
 };
@@ -353,7 +353,7 @@ export const useNotification = () => {
 **Extraction:** Shared hook
 
 ```typescript
-// @autox-shared/hooks/useNamespaces.ts
+// @autox/hooks/useNamespaces.ts
 export const useNamespaces = (): [NamespaceKind[], boolean, Error | undefined] => {
   // Exact 15-line implementation
 };
@@ -414,7 +414,7 @@ export const useNamespaces = (): [NamespaceKind[], boolean, Error | undefined] =
 **Extraction:** Move entire file to shared library
 
 ```typescript
-// @autox-shared/api/s3.ts
+// @autox/api/s3.ts
 // Exact 175-line implementation (no changes)
 ```
 
@@ -437,7 +437,7 @@ export const useNamespaces = (): [NamespaceKind[], boolean, Error | undefined] =
 **Extraction:** Shared API client with optional features
 
 ```typescript
-// @autox-shared/api/pipelines.ts
+// @autox/api/pipelines.ts
 export async function getPipelineRunsFromBFF(...) {
   // Shared 34-line implementation
 }
@@ -468,7 +468,7 @@ AutoRAG has `api/k8s.ts` with:
 **Extraction:** Only `getNamespaces` is shared
 
 ```typescript
-// @autox-shared/api/k8s.ts
+// @autox/api/k8s.ts
 export async function getNamespaces(...) {
   // 18-line implementation
 }
@@ -495,7 +495,7 @@ export async function getNamespaces(...) {
 **Extraction:** Generic results context factory
 
 ```typescript
-// @autox-shared/context/ResultsContext.ts
+// @autox/context/ResultsContext.ts
 export function createResultsContext<TResult, TParams>() {
   type ResultsContextProps = {
     pipelineRun?: PipelineRun;
@@ -555,7 +555,7 @@ export function createResultsContext<TResult, TParams>() {
 
 ```typescript
 // packages/automl/context/AutomlResultsContext.ts
-import { createResultsContext } from '@autox-shared/context/ResultsContext';
+import { createResultsContext } from '@autox/context/ResultsContext';
 import type { AutomlModel } from '../types';
 import type { ConfigureSchema } from '../schemas';
 
@@ -640,7 +640,7 @@ if (!response.ok) {
 **Extraction:**
 
 ```typescript
-// @autox-shared/api/errors.ts
+// @autox/api/errors.ts
 export async function parseErrorResponse(response: Response, action: string): Promise<Error> {
   let errorMessage = response.statusText;
   try {
@@ -680,7 +680,7 @@ try {
 **Extraction:**
 
 ```typescript
-// @autox-shared/api/validation.ts
+// @autox/api/validation.ts
 export function validateResponse<T>(
   data: unknown,
   schema: z.ZodSchema<T>,
@@ -721,7 +721,7 @@ return {
 **Recommendation:** Create shared transformers
 
 ```typescript
-// @autox-shared/api/transformers.ts
+// @autox/api/transformers.ts
 export function transformPipelineRunsResponse(data: PipelineRunsData) {
   return {
     runs: data.runs,
@@ -995,7 +995,7 @@ Test that AutoML/AutoRAG still work after migration:
 
 1. **Review this document** with team
 2. **Create extraction plan** with detailed tasks
-3. **Set up `@autox-shared` package** with proper tooling
+3. **Set up `@autox` package** with proper tooling
 4. **Begin Phase 1 extractions** (low-risk utilities)
 5. **Write migration guide** for future modules
 6. **Document parameterization patterns** for long-term maintenance

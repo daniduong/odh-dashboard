@@ -1081,7 +1081,7 @@ func (r *BasePipelineRunsRepository) CreatePipelineRun(
 
 **Extract 1,180 LOC of perfect duplicates:**
 
-1. Create `packages/autox-shared/` monorepo package
+1. Create `packages/autox/` monorepo package
 2. Move 100% identical files:
    - `cmd/helpers.go` → `shared/cmd/helpers.go`
    - `internal/models/{namespace,user,health_check,rbac,s3,secret}.go` → `shared/models/`
@@ -1150,7 +1150,7 @@ func (r *BasePipelineRunsRepository) CreatePipelineRun(
 **Impact:**
 - Reduce AutoML BFF from 20,212 to ~4,579 domain-specific lines
 - Reduce AutoRAG BFF from 19,379 to ~3,746 domain-specific lines
-- Create reusable `autox-shared` library of ~15,633 lines
+- Create reusable `autox` library of ~15,633 lines
 - Future BFFs can start with 80% of infrastructure pre-built
 
 **Confidence Level:** High - based on actual line-by-line diff analysis, not estimates

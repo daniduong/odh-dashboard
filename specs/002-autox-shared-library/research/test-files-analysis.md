@@ -116,7 +116,7 @@ func AssertStorageConfig(t *testing.T, storage *models.DSPAObjectStorage, expect
 
 **Usage Example**:
 ```go
-import "github.com/opendatahub-io/autox-library/testing/dspa"
+import "github.com/opendatahub-io/autox/testing/dspa"
 
 func TestMyFeature(t *testing.T) {
     mockDSPA := dspa.MockDSPipelineApplication(
@@ -310,8 +310,8 @@ func SecretWithData(namespace, name string, data map[string]string) corev1.Secre
 ## Recommended Shared Test Package Structure
 
 ```
-packages/autox-library/
-└── internal/
+packages/autox/
+└── pkg/
     └── testing/
         ├── README.md                   # Testing utilities documentation
         │
@@ -380,7 +380,7 @@ packages/autox-library/
 **Impact**: ~1,400 lines of nearly identical test code eliminated
 
 **Required Changes**: 
-- Create shared import path: `github.com/opendatahub-io/autox-library/bff/internal/...`
+- Create shared import path: `github.com/opendatahub-io/autox/bff/pkg/...`
 - Update module imports in AutoML and AutoRAG to reference shared library
 
 ### Phase 3: Medium-Impact, Higher Effort (Refactor Module-Specific Tests)
@@ -403,7 +403,7 @@ packages/autox-library/
 ### Step 1: Create Shared Testing Package
 
 ```bash
-mkdir -p packages/autox-library/internal/testing/{dspa,pipeline,middleware,k8s,s3,http,fixtures}
+mkdir -p packages/autox/pkg/testing/{dspa,pipeline,middleware,k8s,s3,http,fixtures}
 ```
 
 ### Step 2: Extract Identical Files (Phase 1)
@@ -411,10 +411,10 @@ mkdir -p packages/autox-library/internal/testing/{dspa,pipeline,middleware,k8s,s
 ```bash
 # Copy 100% identical test files to shared package
 cp packages/automl/bff/cmd/helpers_test.go \
-   packages/autox-library/internal/testing/http/
+   packages/autox/pkg/testing/http/
 
 cp packages/automl/bff/internal/api/middleware_dspa_errors_test.go \
-   packages/autox-library/internal/testing/middleware/
+   packages/autox/pkg/testing/middleware/
    
 # (Repeat for all Phase 1 files)
 ```
@@ -430,7 +430,7 @@ import (
 
 // After:
 import (
-    "github.com/opendatahub-io/autox-library/bff/internal/testing/pipeline"
+    "github.com/opendatahub-io/autox/bff/pkg/testing/pipeline"
     "github.com/opendatahub-io/automl-library/bff/internal/models"
 )
 ```
@@ -438,15 +438,15 @@ import (
 ### Step 4: Refactor Module-Specific Tests (Phase 3)
 
 ```go
-// Extract shared patterns to autox-library
-// In packages/autox-library/internal/testing/http/setup.go
+// Extract shared patterns to autox
+// In packages/autox/pkg/testing/http/setup.go
 func SetupHandlerTest(t *testing.T, method, path string, body interface{}) (*httptest.ResponseRecorder, *http.Request) {
     // Shared handler test setup
 }
 
 // Use shared utilities in AutoML/AutoRAG
 // In packages/automl/bff/internal/api/my_handler_test.go
-import "github.com/opendatahub-io/autox-library/internal/testing/http"
+import "github.com/opendatahub-io/autox/pkg/testing/http"
 
 func TestMyHandler(t *testing.T) {
     recorder, req := http.SetupHandlerTest(t, "POST", "/api/v1/my-endpoint", requestBody)
@@ -502,7 +502,7 @@ The AutoML and AutoRAG packages contain **extensive test code duplication** with
 **Recommendation**: Proceed with 3-phase extraction strategy, starting with 100% identical files (zero risk, immediate value) and progressively extracting shared patterns from module-specific tests.
 
 **Next Steps**:
-1. Create `packages/autox-library/internal/testing/` structure
+1. Create `packages/autox/pkg/testing/` structure
 2. Extract Phase 1 files (495 lines of identical code)
 3. Normalize import paths for Phase 2 extraction
 4. Refactor module-specific tests to use shared utilities (Phase 3)

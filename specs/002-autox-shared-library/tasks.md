@@ -2,8 +2,8 @@
 
 **Feature Branch**: `002-autox-shared-library`  
 **Generated**: 2026-04-23  
-**Total Tasks**: 202 (updated after /speckit.analyze remediation)
-**Estimated Effort**: 360 hours (8-12 weeks with 2-3 developers)
+**Total Tasks**: 203 (updated after /speckit.analyze remediation)
+**Estimated Effort**: 361 hours (8-12 weeks with 2-3 developers)
 
 ---
 
@@ -114,13 +114,13 @@ Polish Phase (T083-T089)
 ### Tasks
 
 - [ ] T001 Create packages/autox directory structure
-- [ ] T002 [P] Create packages/autox/package.json with workspace configuration
+- [ ] T002 [P] Create packages/autox/package.json
 - [ ] T003 [P] Create packages/autox/frontend/package.json with dependencies (React 18, PatternFly v6, React Query v5, Zod)
 - [ ] T004 [P] Create packages/autox/frontend/tsconfig.json extending @odh-dashboard/tsconfig
 - [ ] T005 [P] Create packages/autox/frontend/.eslintrc.js extending @odh-dashboard/eslint-config
 - [ ] T006 [P] Create packages/autox/frontend/jest.config.ts extending @odh-dashboard/jest-config
 - [ ] T007 [P] Create packages/autox/bff/go.mod with module path github.com/opendatahub-io/odh-dashboard/packages/autox/bff
-- [ ] T008 [P] Create packages/autox/bff/internal directory structure (api/, models/, integrations/, utils/)
+- [ ] T008 [P] Create packages/autox/bff/pkg directory structure (api/, models/, integrations/, utils/)
 - [ ] T009 [P] Create packages/autox/README.md with package overview and usage guide
 - [ ] T010 [P] Create packages/autox/frontend/src directory structure (hooks/, components/, utils/, types/)
 - [ ] T011 Run npm install from repo root to link AutoX via npm workspaces
@@ -151,7 +151,7 @@ Polish Phase (T083-T089)
 - [ ] T016 [US5] Run go work sync to synchronize Go workspace
 - [ ] T017 [US5] Verify Go workspace by building all BFF packages with go build ./... from repo root
 - [ ] T018 [US5] Update root package.json workspaces array to include packages/autox
-- [ ] T019 [US5] Run npm install from repo root to establish npm workspace links
+- [ ] T019 [US5] Run npm install from repo root to establish npm workspaces links
 - [ ] T020 [US5] Verify AutoX is linked by running npm run type-check from packages/automl/frontend
 - [ ] T021 [US5] Verify AutoX is linked by running npm run type-check from packages/autorag/frontend
 
@@ -183,42 +183,42 @@ Polish Phase (T083-T089)
 
 ### Implementation Tasks
 
-- [ ] T025 [P] [US1] Create packages/autox/bff/internal/models/health_check.go with HealthCheck struct
-- [ ] T026 [P] [US1] Create packages/autox/bff/internal/models/namespace.go with Namespace struct
-- [ ] T027 [P] [US1] Create packages/autox/bff/internal/models/user.go with User struct
-- [ ] T028 [P] [US1] Create packages/autox/bff/internal/models/secret.go with Secret struct
-- [ ] T029 [P] [US1] Create packages/autox/bff/internal/models/s3.go with S3Credentials struct
-- [ ] T030 [P] [US1] Create packages/autox/bff/internal/models/pipeline_runs.go with PipelineRun struct and RuntimeStateKF enum
-- [ ] T031 [P] [US1] Create packages/autox/bff/internal/models/pipeline_server.go with PipelineServer struct
-- [ ] T032 [P] [US1] Create packages/autox/bff/internal/api/errors.go with ErrorResponse struct and error helper functions
-- [ ] T033 [P] [US1] Create packages/autox/bff/internal/api/helpers.go with WriteJSON and ReadJSON functions
-- [ ] T034 [P] [US1] Create packages/autox/bff/internal/integrations/kubernetes/interface.go with KubernetesClientInterface
-- [ ] T035 [US1] Create packages/autox/bff/internal/integrations/kubernetes/client.go with default K8s client implementation
-- [ ] T036 [US1] Create packages/autox/bff/internal/integrations/kubernetes/factory.go with NewInternalK8sClient factory
-- [ ] T037 [US1] Create packages/autox/bff/internal/integrations/kubernetes/portforward.go with port forwarding utilities
-- [ ] T038 [P] [US1] Create packages/autox/bff/internal/integrations/s3/interface.go with S3ClientInterface
-- [ ] T039 [US1] Create packages/autox/bff/internal/integrations/s3/client.go with AWS SDK wrapper implementation
-- [ ] T040 [P] [US1] Create packages/autox/bff/internal/integrations/pipelineserver/interface.go with PipelineServerClientInterface
-- [ ] T041 [US1] Create packages/autox/bff/internal/integrations/pipelineserver/client.go with KFP client implementation
-- [ ] T042 [P] [US1] Create packages/autox/bff/internal/utils/helpers.go with common helper functions
-- [ ] T043 [P] [US1] Create packages/autox/bff/internal/utils/pagination.go with query parameter filtering utilities
+- [ ] T025 [P] [US1] Create packages/autox/bff/pkg/models/health_check.go with HealthCheck struct
+- [ ] T026 [P] [US1] Create packages/autox/bff/pkg/models/namespace.go with Namespace struct
+- [ ] T027 [P] [US1] Create packages/autox/bff/pkg/models/user.go with User struct
+- [ ] T028 [P] [US1] Create packages/autox/bff/pkg/models/secret.go with Secret struct
+- [ ] T029 [P] [US1] Create packages/autox/bff/pkg/models/s3.go with S3Credentials struct
+- [ ] T030 [P] [US1] Create packages/autox/bff/pkg/models/pipeline_runs.go with PipelineRun struct and RuntimeStateKF enum
+- [ ] T031 [P] [US1] Create packages/autox/bff/pkg/models/pipeline_server.go with PipelineServer struct
+- [ ] T032 [P] [US1] Create packages/autox/bff/pkg/api/errors.go with ErrorResponse struct and error helper functions
+- [ ] T033 [P] [US1] Create packages/autox/bff/pkg/api/helpers.go with WriteJSON and ReadJSON functions
+- [ ] T034 [P] [US1] Create packages/autox/bff/pkg/integrations/kubernetes/interface.go with KubernetesClientInterface
+- [ ] T035 [US1] Create packages/autox/bff/pkg/integrations/kubernetes/client.go with default K8s client implementation
+- [ ] T036 [US1] Create packages/autox/bff/pkg/integrations/kubernetes/factory.go with NewInternalK8sClient factory
+- [ ] T037 [US1] Create packages/autox/bff/pkg/integrations/kubernetes/portforward.go with port forwarding utilities
+- [ ] T038 [P] [US1] Create packages/autox/bff/pkg/integrations/s3/interface.go with S3ClientInterface
+- [ ] T039 [US1] Create packages/autox/bff/pkg/integrations/s3/client.go with AWS SDK wrapper implementation
+- [ ] T040 [P] [US1] Create packages/autox/bff/pkg/integrations/pipelineserver/interface.go with PipelineServerClientInterface
+- [ ] T041 [US1] Create packages/autox/bff/pkg/integrations/pipelineserver/client.go with KFP client implementation
+- [ ] T042 [P] [US1] Create packages/autox/bff/pkg/utils/helpers.go with common helper functions
+- [ ] T043 [P] [US1] Create packages/autox/bff/pkg/utils/pagination.go with query parameter filtering utilities
 
 ### Unit Test Tasks (AutoX Internal)
 
-- [ ] T044 [P] [US1] Create packages/autox/bff/internal/api/errors_test.go with error helper tests
-- [ ] T045 [P] [US1] Create packages/autox/bff/internal/api/helpers_test.go with JSON helper tests
-- [ ] T046 [P] [US1] Create packages/autox/bff/internal/integrations/kubernetes/client_test.go with K8s client tests
-- [ ] T047 [P] [US1] Create packages/autox/bff/internal/integrations/s3/client_test.go with S3 client tests
-- [ ] T048 [P] [US1] Create packages/autox/bff/internal/integrations/pipelineserver/client_test.go with pipeline client tests
-- [ ] T049 [P] [US1] Create packages/autox/bff/internal/utils/helpers_test.go with helper function tests
+- [ ] T044 [P] [US1] Create packages/autox/bff/pkg/api/errors_test.go with error helper tests
+- [ ] T045 [P] [US1] Create packages/autox/bff/pkg/api/helpers_test.go with JSON helper tests
+- [ ] T046 [P] [US1] Create packages/autox/bff/pkg/integrations/kubernetes/client_test.go with K8s client tests
+- [ ] T047 [P] [US1] Create packages/autox/bff/pkg/integrations/s3/client_test.go with S3 client tests
+- [ ] T048 [P] [US1] Create packages/autox/bff/pkg/integrations/pipelineserver/client_test.go with pipeline client tests
+- [ ] T049 [P] [US1] Create packages/autox/bff/pkg/utils/helpers_test.go with helper function tests
 
 ### Integration Tasks (Verify in AutoML/AutoRAG)
 
-- [ ] T050 [US1] Update packages/automl/bff imports to use autox/bff/internal/models for common models
-- [ ] T051 [US1] Update packages/automl/bff imports to use autox/bff/internal/api for error handlers and helpers
+- [ ] T050 [US1] Update packages/automl/bff imports to use autox/bff/pkg/models for common models
+- [ ] T051 [US1] Update packages/automl/bff imports to use autox/bff/pkg/api for error handlers and helpers
 - [ ] T052 [US1] Update packages/automl/bff to inject AutoX K8s client in handlers
-- [ ] T053 [US1] Update packages/autorag/bff imports to use autox/bff/internal/models for common models
-- [ ] T054 [US1] Update packages/autorag/bff imports to use autox/bff/internal/api for error handlers and helpers
+- [ ] T053 [US1] Update packages/autorag/bff imports to use autox/bff/pkg/models for common models
+- [ ] T054 [US1] Update packages/autorag/bff imports to use autox/bff/pkg/api for error handlers and helpers
 - [ ] T055 [US1] Update packages/autorag/bff to inject AutoX S3 client in handlers
 - [ ] T056 [US1] Run go test ./... from packages/automl/bff and packages/autorag/bff to verify all tests pass
 - [ ] T057 [US1] Run go build ./... from repo root to verify all BFF packages compile successfully
@@ -294,6 +294,7 @@ Polish Phase (T083-T089)
 - [ ] T092 [US2] Run npm run type-check from packages/automl/frontend and packages/autorag/frontend
 - [ ] T093 [US2] Run npm test from packages/autox/frontend to verify all AutoX tests pass
 - [ ] T093a [US2] Generate coverage report (npm test -- --coverage) and verify ≥80% overall coverage and 100% for critical utilities (fail if thresholds not met)
+- [ ] T093b [US2] Review AutoX components for FR-009 compliance: verify no component has >10 props or handles >2 unrelated concerns (use eslint-plugin-react/jsx-max-props if available, manual review otherwise)
 - [ ] T094 [US2] Start dev server (npm run dev) and manually verify AutoML/AutoRAG features work with AutoX primitives
 - [ ] T094a [US2] Verify SC-003 threshold: Calculate UI LOC reduction percentage and confirm ≥50% (compare AutoML+AutoRAG frontend before/after extraction to AutoX frontend)
 
@@ -397,9 +398,9 @@ Polish Phase (T083-T089)
 
 ### Extraction Tasks: BFF Integration Clients
 
-- [ ] T126 [US7] Extract S3 client full implementation (900 LOC) to packages/autox/bff/internal/integrations/s3/
-- [ ] T127 [US7] Extract K8s integration full implementation (800 LOC) to packages/autox/bff/internal/integrations/kubernetes/
-- [ ] T128 [US7] Extract Pipeline server client full implementation (630 LOC) to packages/autox/bff/internal/integrations/pipelineserver/
+- [ ] T126 [US7] Extract S3 client full implementation (900 LOC) to packages/autox/bff/pkg/integrations/s3/
+- [ ] T127 [US7] Extract K8s integration full implementation (800 LOC) to packages/autox/bff/pkg/integrations/kubernetes/
+- [ ] T128 [US7] Extract Pipeline server client full implementation (630 LOC) to packages/autox/bff/pkg/integrations/pipelineserver/
 - [ ] T129 [US7] Update AutoML BFF to use full AutoX S3 client (remove AutoML-specific GetCSVSchema to handler)
 - [ ] T130 [US7] Update AutoRAG BFF to use full AutoX K8s client
 - [ ] T131 [US7] Update AutoML/AutoRAG to use full AutoX Pipeline server client
@@ -450,10 +451,10 @@ Polish Phase (T083-T089)
 
 ### Implementation Tasks
 
-- [ ] T148 [P] [US4] Create packages/autox/bff/internal/repositories/pipeline_repository.go with PipelineRepository interface
-- [ ] T149 [US4] Implement packages/autox/bff/internal/repositories/pipeline_discovery.go with default discovery strategy
-- [ ] T150 [US4] Create packages/autox/bff/internal/repositories/secret_repository.go with SecretRepository interface
-- [ ] T151 [US4] Implement packages/autox/bff/internal/repositories/secret_filtering.go with base filtering strategy
+- [ ] T148 [P] [US4] Create packages/autox/bff/pkg/repositories/pipeline_repository.go with PipelineRepository interface
+- [ ] T149 [US4] Implement packages/autox/bff/pkg/repositories/pipeline_discovery.go with default discovery strategy
+- [ ] T150 [US4] Create packages/autox/bff/pkg/repositories/secret_repository.go with SecretRepository interface
+- [ ] T151 [US4] Implement packages/autox/bff/pkg/repositories/secret_filtering.go with base filtering strategy
 - [ ] T152 [P] [US4] Create packages/automl/bff/internal/strategies/automl_pipeline_strategy.go implementing PipelineRepository
 - [ ] T153 [P] [US4] Create packages/autorag/bff/internal/strategies/autorag_pipeline_strategy.go implementing PipelineRepository
 - [ ] T154 [US4] Update packages/automl/bff/cmd/main.go to inject AutoML pipeline strategy into AutoX repository
@@ -497,8 +498,8 @@ Polish Phase (T083-T089)
 
 - [ ] T168 [P] [US7] Verify all types extracted to packages/autox/frontend/src/types/ (394 LOC - done in US2)
 - [ ] T169 [P] [US7] Verify all frontend utilities extracted to packages/autox/frontend/src/utils/ (118 LOC - done in US2)
-- [ ] T170 [P] [US7] Extract BFF helpers (371 LOC) to packages/autox/bff/internal/utils/helpers.go
-- [ ] T171 [P] [US7] Extract repository patterns (150 LOC) to packages/autox/bff/internal/repositories/
+- [ ] T170 [P] [US7] Extract BFF helpers (371 LOC) to packages/autox/bff/pkg/utils/helpers.go
+- [ ] T171 [P] [US7] Extract repository patterns (150 LOC) to packages/autox/bff/pkg/repositories/
 
 ### Cleanup & Verification
 
@@ -562,44 +563,44 @@ Polish Phase (T083-T089)
 ### User Story Acceptance Criteria
 
 **US1 - Import Shared BFF Utilities**:
-- [x] AutoX exports BFF interfaces, utilities, clients
-- [x] AutoML BFF handler imports and uses AutoX utilities
-- [x] AutoRAG BFF handler imports and uses AutoX clients
-- [x] Behavior is consistent across both packages
+- [ ]  AutoX exports BFF interfaces, utilities, clients
+- [ ]  AutoML BFF handler imports and uses AutoX utilities
+- [ ]  AutoRAG BFF handler imports and uses AutoX clients
+- [ ]  Behavior is consistent across both packages
 
 **US2 - Compose UI Primitives**:
-- [x] AutoX provides primitive hooks (usePipelineRuns, useNotification, etc.)
-- [x] AutoX provides low-level components (FileExplorer, PipelineRunsTable)
-- [x] AutoML composes AutoX primitives into feature components
-- [x] AutoRAG composes AutoX primitives differently for RAG-specific UI
+- [ ]  AutoX provides primitive hooks (usePipelineRuns, useNotification, etc.)
+- [ ]  AutoX provides low-level components (FileExplorer, PipelineRunsTable)
+- [ ]  AutoML composes AutoX primitives into feature components
+- [ ]  AutoRAG composes AutoX primitives differently for RAG-specific UI
 
 **US3 - Handle Domain-Specific Logic**:
-- [x] AutoML handler file extends AutoX validation interface
-- [x] AutoRAG handler customizes AutoX parser for specific formats
-- [x] Neither package pollutes AutoX with domain-specific logic
+- [ ]  AutoML handler file extends AutoX validation interface
+- [ ]  AutoRAG handler customizes AutoX parser for specific formats
+- [ ]  Neither package pollutes AutoX with domain-specific logic
 
 **US4 - Strategy/DI Patterns**:
-- [x] AutoX defines strategy interfaces (PipelineRepository, etc.)
-- [x] AutoML injects custom strategy implementation
-- [x] AutoRAG injects different strategy implementation
-- [x] Services use injected strategies correctly
+- [ ]  AutoX defines strategy interfaces (PipelineRepository, etc.)
+- [ ]  AutoML injects custom strategy implementation
+- [ ]  AutoRAG injects different strategy implementation
+- [ ]  Services use injected strategies correctly
 
 **US5 - Development Environment Setup**:
-- [x] npm workspaces link AutoX, AutoML, AutoRAG frontends
-- [x] Go workspaces link AutoX, AutoML, AutoRAG BFFs
-- [x] Changes to AutoX reflected in consumers without manual linking
+- [ ]  npm workspaces link AutoX, AutoML, AutoRAG frontends
+- [ ]  Go workspaces link AutoX, AutoML, AutoRAG BFFs
+- [ ]  Changes to AutoX reflected in consumers without manual linking
 
 **US6 - Module Federation Runtime Singleton**:
-- [x] AutoX configured as Module Federation shared singleton
-- [x] Only one instance of AutoX exists in browser runtime
-- [x] Bundle size optimized with no duplicate AutoX code
+- [ ]  AutoX configured as Module Federation shared singleton
+- [ ]  Only one instance of AutoX exists in browser runtime
+- [ ]  Bundle size optimized with no duplicate AutoX code
 
 **US7 - Refactor Existing Duplicate Code**:
-- [x] Phase 1: Perfect duplicates extracted (~3,000 LOC)
-- [x] Phase 2: High-value components extracted (~7,000 LOC)
-- [x] Phase 3: Hooks & state extracted (~2,000 LOC)
-- [x] Phase 4: Utilities & types extracted (~1,300 LOC)
-- [x] Total: ~13,300 LOC extracted (Phases 1-4)
+- [ ]  Phase 1: Perfect duplicates extracted (~3,000 LOC)
+- [ ]  Phase 2: High-value components extracted (~7,000 LOC)
+- [ ]  Phase 3: Hooks & state extracted (~2,000 LOC)
+- [ ]  Phase 4: Utilities & types extracted (~1,300 LOC)
+- [ ]  Total: ~13,300 LOC extracted (Phases 1-4)
 
 ### Technical Verification
 
@@ -705,7 +706,7 @@ Polish Phase (T083-T089)
 
 ---
 
-**Total Tasks**: 202 (includes T094a, T147a, T147b, T184a added via /speckit.analyze remediation)
+**Total Tasks**: 203 (includes T093b, T094a, T147a, T147b, T184a added via /speckit.analyze remediation)
 **Parallelizable Tasks**: 68 (marked with `[P]`)  
 **Sequential Dependencies**: Clearly marked in phase dependencies  
 **Estimated Completion**: 8-12 weeks with 2-3 developers working full-time

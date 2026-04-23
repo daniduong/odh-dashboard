@@ -35,7 +35,7 @@ This document defines the key entities, interfaces, and data structures exported
 **Example Structure** (Go):
 
 ```go
-// internal/models/namespace.go
+// pkg/models/namespace.go
 package models
 
 type Namespace struct {
@@ -44,7 +44,7 @@ type Namespace struct {
     Status      string `json:"status"`
 }
 
-// internal/models/pipeline_runs.go
+// pkg/models/pipeline_runs.go
 package models
 
 type PipelineRun struct {
@@ -78,7 +78,7 @@ type PipelineRun struct {
 ##### Kubernetes Client Interface
 
 ```go
-// internal/integrations/kubernetes/interface.go
+// pkg/integrations/kubernetes/interface.go
 package kubernetes
 
 import (
@@ -108,14 +108,14 @@ type KubernetesClientInterface interface {
 }
 ```
 
-**Extraction**: 100% identical across AutoML and AutoRAG (`internal/integrations/kubernetes/interface.go`, 800 LOC total)
+**Extraction**: 100% identical across AutoML and AutoRAG (`pkg/integrations/kubernetes/interface.go`, 800 LOC total)
 
 **Implementation Note**: AutoX provides a default implementation using `k8s.io/client-go`. Consumers can inject custom implementations for mocking or testing.
 
 ##### S3 Client Interface
 
 ```go
-// internal/integrations/s3/interface.go
+// pkg/integrations/s3/interface.go
 package s3
 
 import (
@@ -157,12 +157,12 @@ type S3Object struct {
 ##### Pipeline Server Client Interface
 
 ```go
-// internal/integrations/pipelineserver/interface.go
+// pkg/integrations/pipelineserver/interface.go
 package pipelineserver
 
 import (
     "context"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
 )
 
 type PipelineServerClientInterface interface {
@@ -205,12 +205,12 @@ type CreatePipelineRunRequest struct {
 ##### Pipeline Repository
 
 ```go
-// internal/repositories/pipeline.go
+// pkg/repositories/pipeline.go
 package repositories
 
 import (
     "context"
-    ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/pipelineserver"
+    ps "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/pipelineserver"
 )
 
 type DiscoveredPipeline struct {
@@ -271,13 +271,13 @@ func (h *Handler) CreateTimeSeriesPipeline(ctx context.Context) {
 ##### Secret Repository
 
 ```go
-// internal/repositories/secret.go
+// pkg/repositories/secret.go
 package repositories
 
 import (
     "context"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/integrations/kubernetes"
-    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/internal/models"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/kubernetes"
+    "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
 )
 
 type SecretRepository interface {
@@ -324,7 +324,7 @@ func filterLlamaStackSecrets(secrets []models.Secret) []models.Secret {
 ##### Error Response Models
 
 ```go
-// internal/api/errors.go
+// pkg/api/errors.go
 package api
 
 type ErrorResponse struct {
@@ -347,7 +347,7 @@ type ErrorHandler interface {
 ##### Request/Response Helpers
 
 ```go
-// internal/api/helpers.go
+// pkg/api/helpers.go
 package api
 
 import (

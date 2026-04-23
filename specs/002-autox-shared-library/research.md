@@ -517,7 +517,7 @@ export function usePipelineRunQuery(runId?: string, ns?: string) {
 ### Immediate Actions (This Sprint)
 
 1. ✅ **Approve extraction plan** - Review with team, get buy-in
-2. ✅ **Create autox-shared package** - Set up directory structure
+2. ✅ **Create autox package** - Set up directory structure
 3. ✅ **Begin Phase 1** - Extract perfect duplicates (FileExplorer, useNotification, S3 API)
 4. ✅ **Set up CI/CD** - Ensure tests run for shared library
 

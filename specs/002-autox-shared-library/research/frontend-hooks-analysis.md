@@ -67,7 +67,7 @@ export const useNamespaces = (): [NamespaceKind[], boolean, Error | undefined] =
 **Extractable Logic:**
 - ✅ **IMMEDIATE EXTRACTION CANDIDATE**
 - Exact duplicate, no differences
-- Move to `packages/autox-shared/src/hooks/useNamespaces.ts`
+- Move to `packages/autox/src/hooks/useNamespaces.ts`
 - Update both packages to import from shared library
 
 ---
@@ -94,7 +94,7 @@ export const useNamespaces = (): [NamespaceKind[], boolean, Error | undefined] =
 **Extractable Logic:**
 - ✅ **IMMEDIATE EXTRACTION CANDIDATE**
 - Exact duplicate with comprehensive JSDoc
-- Move to `packages/autox-shared/src/hooks/useNotification.ts`
+- Move to `packages/autox/src/hooks/useNotification.ts`
 - Both packages use same store structure (`addNotification`, `removeNotification`)
 
 ---
@@ -213,7 +213,7 @@ export default useUser;
 **Extractable Logic:**
 - ✅ **IMMEDIATE EXTRACTION CANDIDATE**
 - Exact duplicate
-- Move to `packages/autox-shared/src/hooks/useUser.ts`
+- Move to `packages/autox/src/hooks/useUser.ts`
 - Requires shared `AppContext` (already exists in both packages identically)
 
 ---
@@ -253,7 +253,7 @@ export function usePreferredNamespaceRedirect(): void {
 **Extractable Logic:**
 - ✅ **IMMEDIATE EXTRACTION CANDIDATE**
 - Exact duplicate
-- Move to `packages/autox-shared/src/hooks/usePreferredNamespaceRedirect.ts`
+- Move to `packages/autox/src/hooks/usePreferredNamespaceRedirect.ts`
 
 ---
 
@@ -312,7 +312,7 @@ await queryClient.invalidateQueries({ queryKey: ['autorag', 'pipelineRun', runId
 **Extractable Logic:**
 - ✅ **IMMEDIATE EXTRACTION CANDIDATE**
 - Exact duplicate
-- Move to `packages/autox-shared/src/hooks/topology/useTopologyController.ts`
+- Move to `packages/autox/src/hooks/topology/useTopologyController.ts`
 - Both packages share identical constants: `PIPELINE_NODE_SEPARATION_HORIZONTAL`, `PIPELINE_NODE_SEPARATION_VERTICAL`
 
 ---
@@ -564,7 +564,7 @@ if (dangerousKeys.includes(name)) {
 
 **Proposed shared utility:**
 ```typescript
-// packages/autox-shared/src/utils/security.ts
+// packages/autox/src/utils/security.ts
 const DANGEROUS_KEYS = ['__proto__', 'constructor', 'prototype'];
 
 export function validateObjectKey(key: string): boolean {
@@ -597,7 +597,7 @@ const error = hasError
 
 **Proposed shared utility:**
 ```typescript
-// packages/autox-shared/src/utils/queryErrors.ts
+// packages/autox/src/utils/queryErrors.ts
 export function aggregateQueryErrors(
   ...errorChecks: Array<{ isError: boolean; message: string }>
 ): Error | undefined {
@@ -637,7 +637,7 @@ React.useEffect(() => {
 
 **Proposed shared utility:**
 ```typescript
-// packages/autox-shared/src/hooks/usePaginationTokens.ts
+// packages/autox/src/hooks/usePaginationTokens.ts
 export function usePaginationTokens(
   page: number,
   loaded: boolean,
@@ -677,7 +677,7 @@ export function usePaginationTokens(
 
 **Recommendation:**
 ```typescript
-// packages/autox-shared/src/utils/queryKeys.ts
+// packages/autox/src/utils/queryKeys.ts
 export const queryKeys = {
   namespaces: () => ['namespaces'],
   pipelineRun: (runId: string, namespace: string, prefix?: string) =>
@@ -718,7 +718,7 @@ export const queryKeys = {
 ## Recommendations
 
 ### Phase 1: Immediate Wins (Week 1)
-1. ✅ Extract 5 identical hooks to `packages/autox-shared/src/hooks/`
+1. ✅ Extract 5 identical hooks to `packages/autox/src/hooks/`
    - useNamespaces.ts
    - useNotification.ts
    - useUser.ts
@@ -788,7 +788,7 @@ export const queryKeys = {
 
 ### Per-Hook Extraction
 
-- [ ] Copy hook to `packages/autox-shared/src/hooks/`
+- [ ] Copy hook to `packages/autox/src/hooks/`
 - [ ] Add comprehensive JSDoc
 - [ ] Create unit tests
 - [ ] Update AutoML to import from shared library
@@ -796,7 +796,7 @@ export const queryKeys = {
 - [ ] Run AutoML tests
 - [ ] Run AutoRAG tests
 - [ ] Remove duplicate files from both packages
-- [ ] Update package exports in autox-shared
+- [ ] Update package exports in autox
 
 ### Parameterized Hooks
 

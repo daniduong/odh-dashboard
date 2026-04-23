@@ -617,8 +617,8 @@
 ## Recommended Shared Library Structure
 
 ```
-packages/autox-shared/bff/
-├── internal/
+packages/autox/bff/
+├── pkg/
 │   ├── models/
 │   │   ├── groups.go              # 100% shared
 │   │   ├── health_check.go        # 100% shared
@@ -664,8 +664,8 @@ packages/autox-shared/bff/
 
 1. **Import Path**: Shared code will use import path like:
    ```go
-   import "github.com/opendatahub-io/odh-dashboard/packages/autox-shared/bff/internal/models"
-   import "github.com/opendatahub-io/odh-dashboard/packages/autox-shared/bff/internal/integrations/kubernetes"
+   import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/models"
+   import "github.com/opendatahub-io/odh-dashboard/packages/autox/bff/pkg/integrations/kubernetes"
    ```
 
 2. **Product Extensions**: Product-specific code can embed or extend shared types:
