@@ -33,6 +33,12 @@ Create a shared library package called **AutoX** (`packages/autox/`) that consol
   - julienschmidt/httprouter (HTTP routing)
   - github.com/rs/cors (CORS middleware)
 
+**Repository/Module Paths**:
+- Canonical repository: `github.com/opendatahub-io/odh-dashboard`
+- AutoX BFF Go module: `github.com/opendatahub-io/odh-dashboard/packages/autox/bff`
+- AutoML BFF Go module: `github.com/opendatahub-io/odh-dashboard/packages/automl/bff`
+- AutoRAG BFF Go module: `github.com/opendatahub-io/odh-dashboard/packages/autorag/bff`
+
 **Storage**: N/A (shared library - no direct storage, consumers handle storage)
 
 **Testing**: 
@@ -105,7 +111,7 @@ Create a shared library package called **AutoX** (`packages/autox/`) that consol
 - **Components**: PatternFly v6 patterns, composition over configuration
 - **State**: React hooks, React Query for async state, Zustand for client state
 
-#### Go (BFF Services) ✅ PASS
+#### Go (BFF) ✅ PASS
 
 - **Formatting**: gofmt and configured linters
 - **Error Handling**: Explicit error returns with context, no panics in utilities
