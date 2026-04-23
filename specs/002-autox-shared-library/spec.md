@@ -17,7 +17,7 @@ As a developer working on the AutoML or AutoRAG BFF, I want to import shared int
 
 **Why this priority**: This is the foundation of the shared library - without it, there's no value. It eliminates the most common source of duplication and inconsistency.
 
-**Independent Test**: Can be fully tested by creating a simple shared utility (e.g., error formatter or logger interface) in AutoX, importing it in AutoML BFF, and verifying it works correctly. Delivers immediate value by reducing duplication.
+**Independent Test**: Can be fully tested by creating a simple shared utility in AutoX, importing it in AutoML BFF, and verifying it works correctly. Delivers immediate value by reducing duplication.
 
 **Acceptance Scenarios**:
 
@@ -65,7 +65,7 @@ As a developer needing to customize shared service behavior, I want to use strat
 
 **Why this priority**: This is needed for advanced scenarios where handler files are insufficient. While important for flexibility, it's not needed for initial MVP functionality.
 
-**Independent Test**: Can be tested by defining a strategy interface in AutoX (e.g., for data transformation), implementing different strategies in AutoML and AutoRAG, and injecting them at runtime. Delivers value for complex customization needs.
+**Independent Test**: Can be tested by defining a strategy interface in AutoX, implementing different strategies in AutoML and AutoRAG, and injecting them at runtime. Delivers value for complex customization needs.
 
 **Acceptance Scenarios**:
 
@@ -102,8 +102,7 @@ As a user of the dashboard, I want AutoX to be loaded as a Module Federation sin
 **Acceptance Scenarios**:
 
 1. **Given** AutoX is configured as a Module Federation singleton, **When** both AutoML and AutoRAG load, **Then** only one instance of AutoX exists in the runtime
-2. **Given** AutoX contains state or context, **When** both packages access it, **Then** state is shared and consistent
-3. **Given** the user navigates between AutoML and AutoRAG features, **When** the app loads, **Then** bundle size is optimized with no duplicate AutoX code
+2. **Given** the user navigates between AutoML and AutoRAG features, **When** the app loads, **Then** bundle size is optimized with no duplicate AutoX code
 
 ---
 
@@ -148,16 +147,15 @@ As a maintainer, I want to identify and refactor existing duplicate code between
   - Package-specific: Highly specialized logic (<20% code reuse)
 
 - **What if a third package (not AutoML/AutoRAG) needs AutoX functionality?**
-  - AutoX should be designed as a general automation utility package
-  - Other packages (eval-hub, etc.) can consume it if they need automation patterns
-  - Keep AutoX focused on automation-related utilities to avoid scope creep
+  - AutoX is not intended to be a general utility package
+  - Other packages (eval-hub, etc.) will not be consuming AutoX
+  - Keep AutoX focused on highly-reusable utilities to avoid scope creep
 
 - **How do we decide if a UI component belongs in AutoX or stays package-specific?**
   - Think composable first: Design components as single-responsibility primitives by default, even if only one package uses them initially
   - AutoX components: Composable building blocks with clear boundaries and minimal coupling to package-specific concerns
   - Package-specific: Highly specialized orchestration or components tightly coupled to one package's unique domain logic
   - Red flags for AutoX: Extensive conditional rendering based on props, package-specific business logic embedded, "do-everything" designs
-  - Default to AutoX when the component represents a reusable automation pattern (status display, metric visualization, run controls)
 
 ## Requirements *(mandatory)*
 
@@ -195,7 +193,7 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 
 ### Key Entities
 
-- **AutoX Package**: The shared library package containing both BFF and UI code for automation-related functionality shared between AutoML and AutoRAG
+- **AutoX Package**: The shared library package containing both BFF and UI code for related functionality shared between AutoML and AutoRAG
 
 - **BFF Shared Logic**: Includes interfaces, utilities, and clients used by both AutoML and AutoRAG backend services
 
@@ -234,7 +232,7 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 ## Assumptions
 
 - The AutoML and AutoRAG packages already have significant code duplication that justifies creating a shared library
-- Both packages will continue to share fundamental automation patterns (runs, experiments, trials, metrics) for the foreseeable future
+- Both packages will continue to share fundamental patterns (pipeline runs, s3, leaderboard, etc.) for the foreseeable future
 - The monorepo already uses Turbo or similar tooling that supports npm workspaces
 - Go 1.18+ is available for Go workspace support
 - Module Federation is already configured in the monorepo for other packages
@@ -257,7 +255,6 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 
 ### Out of Scope
 
-- Refactoring other packages (eval-hub, mlflow, etc.) to use AutoX (can be done later)
 - Creating high-level, opinionated components with many variants
 - Migrating 100% of code (some package-specific logic will remain)
 - Performance optimization beyond Module Federation singleton
