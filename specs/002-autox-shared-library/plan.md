@@ -258,7 +258,7 @@ All implementation follows established patterns and constitution principles. No 
 
 ---
 
-## Phase 0: Research ✅ COMPLETED (2026-04-23)
+## Planning Stage 0: Research ✅ COMPLETED (2026-04-23)
 
 Research was completed in **two rounds** by 12 specialized general-purpose agents conducting deep codebase analysis:
 
@@ -291,7 +291,7 @@ Research was completed in **two rounds** by 12 specialized general-purpose agent
 
 ---
 
-## Phase 1: Design (IN PROGRESS)
+## Planning Stage 1: Design (IN PROGRESS)
 
 ### Tasks
 
@@ -325,9 +325,9 @@ Research was completed in **two rounds** by 12 specialized general-purpose agent
 
 ---
 
-## Phase 2: Task Breakdown (NOT STARTED)
+## Planning Stage 2: Task Breakdown (COMPLETED)
 
-**Note**: This phase is handled by `/speckit.tasks` command (not part of `/speckit.plan`).
+**Note**: This stage is handled by `/speckit.tasks` command (not part of `/speckit.plan`). Implementation phases (Phases 1-10) are defined in tasks.md.
 
 Task breakdown will include:
 - Package scaffolding (directory structure, config files)
@@ -343,21 +343,22 @@ Task breakdown will include:
 
 ## Next Steps
 
-1. ✅ Phase 0 Research: **COMPLETED** (12 agent analyses, comprehensive findings)
-2. 🚧 Phase 1 Design: **IN PROGRESS**
+1. ✅ Planning Stage 0 Research: **COMPLETED** (12 agent analyses, comprehensive findings)
+2. 🚧 Planning Stage 1 Design: **IN PROGRESS**
    - ✅ `research.md` generated and consolidated with deep dive findings
    - ⏳ Generate `data-model.md` with entities and interfaces
    - ⏳ Generate `contracts/bff-api.md` and `contracts/ui-api.md`
    - ⏳ Generate `quickstart.md` with setup guide
    - ⏳ Run agent context update script
-3. ⏸️ Phase 2 Tasks: **BLOCKED** (requires `/speckit.tasks` command)
+3. ✅ Planning Stage 2 Tasks: **COMPLETED** (via `/speckit.tasks` command - see tasks.md for implementation Phases 1-10)
 
-**Immediate Priority**: Begin Phase 1 extraction implementation planning based on research findings. The 5-phase roadmap in research.md provides detailed guidance:
-- **Phase 1**: Quick wins (~3,000 LOC, 2 weeks)
-- **Phase 2**: High-value components (~7,000 LOC, 3 weeks)
-- **Phase 3**: Hooks & state (~2,000 LOC, 2 weeks)
-- **Phase 4**: Utilities & types (~1,300 LOC, 1 week)
-- **Phase 5**: Advanced patterns (~18,000 LOC, 4 weeks)
+**Immediate Priority**: Complete Planning Stage 1 deliverables, then begin implementation Phase 1 (Setup) based on tasks.md. The implementation follows 10 phases with extraction roadmap from research.md:
+- **Implementation Phase 1**: Setup (~8-12 hours)
+- **Implementation Phase 2**: Foundational (US5 + US6, ~12-16 hours)
+- **Implementation Phase 3**: US1 BFF utilities (~20-24 hours)
+- **Implementation Phase 4**: US2 UI primitives (~24-28 hours)
+- **Implementation Phase 5**: US7 Phase 1 perfect duplicates (~16-20 hours)
+- **Implementation Phases 6-10**: Remaining user stories and extraction phases
 
 ---
 

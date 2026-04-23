@@ -75,11 +75,11 @@ As a developer needing to customize shared service behavior, I want to use strat
 
 ---
 
-### User Story 5 - Development Environment Setup (Priority: P2)
+### User Story 5 - Development Environment Setup (Priority: P0 - Foundational)
 
 As a developer setting up the repository locally, I want to use npm workspaces for UI and Go workspaces for BFF so that all packages (AutoX, AutoML, AutoRAG) are properly linked and I can develop with live changes without manual linking.
 
-**Why this priority**: Developer experience is critical for productivity. Without proper workspace setup, development becomes painful with manual linking and build steps.
+**Why this priority**: This is a foundational blocking dependency for US1/US2 (P1 stories). While ranked P0 for dependency ordering, it delivers lower immediate business value than P1 stories. Without workspace setup, P1 stories cannot function. Developer experience is critical for productivity - without proper workspace setup, development becomes painful with manual linking and build steps.
 
 **Independent Test**: Can be tested by running `npm install` at repo root and verifying all UI packages are linked, then using Go workspace commands to verify BFF packages are linked. Delivers value through improved DX.
 
@@ -173,9 +173,9 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 
 - **FR-005**: AutoX MUST support strategy patterns and dependency injection for advanced customization scenarios where handler files are insufficient
 
-- **FR-006**: AutoX MUST prioritize most reusable logic first: low-level interfaces → utilities → clients → services. Extraction follows 5-phase roadmap detailed in research.md: Phase 1 (perfect duplicates), Phase 2 (high-value components), Phase 3 (hooks/state), Phase 4 (utilities/types), Phase 5 (advanced patterns)
+- **FR-006**: AutoX MUST prioritize most reusable logic first (≥80% code reuse threshold): low-level interfaces → utilities → clients → services. Extraction follows 5-phase roadmap detailed in research.md: Phase 1 (perfect duplicates), Phase 2 (high-value components), Phase 3 (hooks/state), Phase 4 (utilities/types), Phase 5 (advanced patterns)
 
-- **FR-007**: Before exporting a complete service from AutoX, research MUST be conducted to ensure high duplication exists (≥80% code reuse) currently and for the foreseeable future, and that the complexity of DI is justified
+- **FR-007**: Before exporting a complete service from AutoX, research MUST be conducted to ensure high duplication (≥80% code reuse) exists currently and for the foreseeable future, and that the complexity of DI is justified
 
 - **FR-008**: AutoX UI MUST be configured as a federated shared dependency (not a remote) in the webpack Module Federation config of both AutoML and AutoRAG with `singleton: true` and `requiredVersion` to ensure single runtime instance and automatic version resolution
 
@@ -192,6 +192,8 @@ As a maintainer, I want to identify and refactor existing duplicate code between
 - **FR-014**: AutoML and AutoRAG MUST update their imports to consume shared logic from AutoX instead of local duplicates
 
 - **FR-015**: AutoX package MUST follow the same structure and conventions as other packages in the monorepo (TypeScript, Go, linting, etc.)
+
+- **FR-016**: AutoX package MUST include comprehensive documentation before implementation begins: data-model.md (key entities and interfaces), contracts/bff-api.md (all BFF exported interfaces, models, utilities), contracts/ui-api.md (all UI exported hooks, components, types), and quickstart.md (developer setup guide, import patterns, testing strategy)
 
 ### Key Entities
 
