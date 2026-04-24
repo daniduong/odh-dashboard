@@ -144,16 +144,16 @@ Polish Phase (T083-T089)
 
 ### Tasks: US5 - Development Environment Setup
 
-- [ ] T012 [US5] Initialize Go workspace with go work init from repo root
-- [ ] T013 [US5] Add AutoX BFF to Go workspace with go work use packages/autox/bff
-- [ ] T014 [US5] Add AutoML BFF to Go workspace with go work use packages/automl/bff
-- [ ] T015 [US5] Add AutoRAG BFF to Go workspace with go work use packages/autorag/bff
-- [ ] T016 [US5] Run go work sync to synchronize Go workspace
-- [ ] T017 [US5] Verify Go workspace by building all BFF packages with go build ./... from repo root
-- [ ] T018 [US5] Update root package.json workspaces array to include packages/autox
-- [ ] T019 [US5] Run npm install from repo root to establish npm workspaces links
-- [ ] T020 [US5] Verify AutoX is linked by running npm run type-check from packages/automl/frontend
-- [ ] T021 [US5] Verify AutoX is linked by running npm run type-check from packages/autorag/frontend
+- [X] T012 [US5] Initialize Go workspace with go work init from repo root
+- [X] T013 [US5] Add AutoX BFF to Go workspace with go work use packages/autox/bff
+- [X] T014 [US5] Add AutoML BFF to Go workspace with go work use packages/automl/bff
+- [X] T015 [US5] Add AutoRAG BFF to Go workspace with go work use packages/autorag/bff
+- [X] T016 [US5] Run go work sync to synchronize Go workspace
+- [X] T017 [US5] Verify Go workspace by building all BFF packages with go build ./... from repo root
+- [X] T018 [US5] Update root package.json workspaces array to include packages/autox
+- [X] T019 [US5] Run npm install from repo root to establish npm workspaces links
+- [X] T020 [US5] Verify AutoX is linked by running npm run type-check from packages/automl/frontend
+- [X] T021 [US5] Verify AutoX is linked by running npm run type-check from packages/autorag/frontend
 
 **US5 Independent Test**: 
 - ✅ npm install succeeds and AutoX is linked to AutoML/AutoRAG
@@ -162,9 +162,9 @@ Polish Phase (T083-T089)
 
 ### Tasks: US6 - Module Federation Runtime Singleton
 
-- [ ] T022 [US6] Add AutoX as shared singleton in packages/automl/frontend/config/moduleFederation.js
-- [ ] T023 [US6] Add AutoX as shared singleton in packages/autorag/frontend/config/moduleFederation.js
-- [ ] T024 [US6] Verify Module Federation singleton by running webpack build and checking only one AutoX instance in bundle
+- [X] T022 [US6] Add AutoX as shared singleton in packages/automl/frontend/config/moduleFederation.js
+- [X] T023 [US6] Add AutoX as shared singleton in packages/autorag/frontend/config/moduleFederation.js
+- [X] T024 [US6] Verify Module Federation singleton by running webpack build and checking only one AutoX instance in bundle
 
 **US6 Independent Test**:
 - ✅ AutoML and AutoRAG webpack builds succeed with AutoX as shared dependency
