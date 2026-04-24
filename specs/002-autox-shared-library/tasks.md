@@ -113,22 +113,22 @@ Polish Phase (T083-T089)
 
 ### Tasks
 
-- [ ] T001 Create packages/autox directory structure
-- [ ] T002 [P] Create packages/autox/package.json
-- [ ] T003 [P] Create packages/autox/frontend/package.json with dependencies (React 18, PatternFly v6, React Query v5, Zod)
-- [ ] T004 [P] Create packages/autox/frontend/tsconfig.json extending @odh-dashboard/tsconfig
-- [ ] T005 [P] Create packages/autox/frontend/.eslintrc.js extending @odh-dashboard/eslint-config
-- [ ] T006 [P] Create packages/autox/frontend/jest.config.ts extending @odh-dashboard/jest-config
-- [ ] T007 [P] Create packages/autox/bff/go.mod with module path github.com/opendatahub-io/odh-dashboard/packages/autox/bff
-- [ ] T008 [P] Create packages/autox/bff/pkg directory structure (api/, models/, integrations/, utils/)
-- [ ] T009 [P] Create packages/autox/README.md with package overview and usage guide
-- [ ] T010 [P] Create packages/autox/frontend/src directory structure (hooks/, components/, utils/, types/)
-- [ ] T011 Run npm install from repo root to link AutoX via npm workspaces
-- [ ] T011a Create specs/002-autox-shared-library/data-model.md documenting key entities, interfaces, and relationships from spec
-- [ ] T011b Create specs/002-autox-shared-library/contracts/bff-api.md documenting all BFF exported interfaces, models, and utilities
-- [ ] T011c Create specs/002-autox-shared-library/contracts/ui-api.md documenting all UI exported hooks, components, and types
-- [ ] T011d Create specs/002-autox-shared-library/quickstart.md with developer setup guide, import patterns, and testing strategy
-- [ ] T011e Run .specify/scripts/bash/update-agent-context.sh claude to update agent knowledge with AutoX package
+- [X] T001 Create packages/autox directory structure
+- [X] T002 [P] Create packages/autox/package.json
+- [X] T003 [P] Create packages/autox/frontend/package.json with dependencies (React 18, PatternFly v6, React Query v5, Zod)
+- [X] T004 [P] Create packages/autox/frontend/tsconfig.json extending @odh-dashboard/tsconfig
+- [X] T005 [P] Create packages/autox/frontend/.eslintrc.js extending @odh-dashboard/eslint-config
+- [X] T006 [P] Create packages/autox/frontend/jest.config.ts extending @odh-dashboard/jest-config
+- [X] T007 [P] Create packages/autox/bff/go.mod with module path github.com/opendatahub-io/odh-dashboard/packages/autox/bff
+- [X] T008 [P] Create packages/autox/bff/pkg directory structure (api/, models/, integrations/, utils/)
+- [X] T009 [P] Create packages/autox/README.md with package overview and usage guide
+- [X] T010 [P] Create packages/autox/frontend/src directory structure (hooks/, components/, utils/, types/)
+- [X] T011 Run npm install from repo root to link AutoX via npm workspaces
+- [X] T011a Create specs/002-autox-shared-library/data-model.md documenting key entities, interfaces, and relationships from spec
+- [X] T011b Create specs/002-autox-shared-library/contracts/bff-api.md documenting all BFF exported interfaces, models, and utilities
+- [X] T011c Create specs/002-autox-shared-library/contracts/ui-api.md documenting all UI exported hooks, components, and types
+- [X] T011d Create specs/002-autox-shared-library/quickstart.md with developer setup guide, import patterns, and testing strategy
+- [X] T011e Run .specify/scripts/bash/update-agent-context.sh claude to update agent knowledge with AutoX package
 
 **Independent Test**: Package structure exists, TypeScript and Go compilation succeed with no errors, all documentation deliverables created
 
