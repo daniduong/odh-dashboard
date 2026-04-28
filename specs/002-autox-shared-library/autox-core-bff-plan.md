@@ -1,8 +1,8 @@
-# `autox-core` BFF Architecture & Refactoring Plan
+# `autox-core` Services Architecture & Refactoring Plan
 
 ## Context
 
-**Objective**: Design and build autox-core as a shared BFF library to enable massive refactoring and deduplication of automl and autorag packages.
+**Objective**: Design and build autox-core as a shared services library to enable massive refactoring and deduplication of automl and autorag packages.
 
 **Current State**:
 - AutoML and AutoRAG have ~80-90% duplicate code in their BFF layers
@@ -12,7 +12,7 @@
 - Some handlers and middleware contain business logic (should be thin)
 
 **Goal**: 
-- Extract common building blocks into autox-core/bff
+- Extract common building blocks into autox-core/services/
 - Establish clean architectural boundaries (handlers → services → clients)
 - Enable code reuse while allowing domain-specific customization
 - Fix architectural issues during the migration
@@ -53,7 +53,7 @@
 ## `autox-core` Directory Structure
 
 ```
-packages/autox-core/bff/
+packages/autox-core/services/
 ├── kubernetes/              # Kubernetes integration
 │   ├── models.go           # Domain models (Namespace, Secret, RequestIdentity)
 │   ├── client.go           # K8s client interface
@@ -245,14 +245,14 @@ func NewPipelinesService(logger *slog.Logger) PipelinesService {
 │                         │                  │
 │ - Domain validation     │                  │
 │ - Parameter building    │                  │
-│ - Multi-step orchestration                │
+│ - Multi-step orchestration|                │
 │ - Composes autox-core   │                  │
 └─────────────────────────┘                  │
          ↓                                    ↓
          └────────────────┬───────────────────┘
                           ↓
 ┌─────────────────────────────────────────────────────────────┐
-│ `autox-core` Service Layer (packages/autox-core/bff/)        │
+│ `autox-core` Service Layer (packages/autox-core/services/)  │
 │ - Common Kubernetes operations (RBAC, secrets, namespaces)  │
 │ - Common Pipelines operations (DSPA discovery, CRUD runs)   │
 │ - Common Storage operations (S3 upload/download/list)       │
@@ -705,7 +705,7 @@ Does the operation need ANY of the following?
 
 **Files to Create**:
 ```
-packages/autox-core/bff/
+packages/autox-core/services/
 ├── common/
 │   ├── errors/
 │   │   ├── errors.go          # Base error types (NotFoundError, ForbiddenError, etc)
@@ -759,7 +759,7 @@ func StatusCode(err error) int {
 
 **Files to Create**:
 ```
-packages/autox-core/bff/kubernetes/
+packages/autox-core/services/kubernetes/
 ├── models.go              # RequestIdentity, Namespace, Secret
 ├── client.go              # KubernetesClient interface
 ├── client_internal.go     # Internal k8s client (service account)
@@ -802,7 +802,7 @@ type KubernetesService interface {
 
 **Files to Create**:
 ```
-packages/autox-core/bff/pipelines/
+packages/autox-core/services/pipelines/
 ├── models.go              # PipelineRun, Pipeline, DSPA, DiscoveredPipeline
 ├── client.go              # HTTP client for KFP API (list, create, terminate runs)
 ├── service.go             # PipelinesService implementation
@@ -866,7 +866,7 @@ type DiscoverPipelinesRequest struct {
 
 **Files to Create**:
 ```
-packages/autox-core/bff/storage/
+packages/autox-core/services/storage/
 ├── models.go              # S3Object, Bucket, CSVSchema
 ├── client.go              # S3Client interface
 ├── service.go             # StorageService implementation
@@ -1099,18 +1099,18 @@ func ValidateUploadObjectRequest(req *UploadObjectRequest) error
 
 | Category | File | Priority | Extract To |
 |----------|------|----------|------------|
-| **K8s Client** | `integrations/kubernetes/factory.go` | P0 | `autox-core/bff/kubernetes/factory.go` |
-| **K8s Client** | `integrations/kubernetes/client.go` | P0 | `autox-core/bff/kubernetes/client.go` |
-| **K8s Client** | `integrations/kubernetes/internal_k8s_client.go` | P0 | `autox-core/bff/kubernetes/client_internal.go` |
-| **K8s Client** | `integrations/kubernetes/token_k8s_client.go` | P0 | `autox-core/bff/kubernetes/client_token.go` |
-| **K8s Client** | `integrations/kubernetes/shared_k8s_client.go` | P0 | `autox-core/bff/kubernetes/client_shared.go` |
-| **K8s Client** | `integrations/kubernetes/portforward.go` | P0 | `autox-core/bff/kubernetes/portforward.go` |
-| **Pipelines** | `integrations/pipelineserver/client.go` | P0 | `autox-core/bff/pipelines/client.go` |
-| **Pipelines** | `integrations/pipelineserver/client_factory.go` | P0 | `autox-core/bff/pipelines/` (merge into service) |
-| **Pipelines** | `repositories/pipeline.go` | P0 | `autox-core/bff/pipelines/discovery.go` |
-| **Pipelines** | `api/middleware.go` (DSPA discovery) | P0 | `autox-core/bff/pipelines/discovery.go` |
-| **Storage** | `integrations/s3/client.go` | P1 | `autox-core/bff/storage/client.go` |
-| **Validation** | Various DNS-1123 validators | P1 | `autox-core/bff/common/validation/` |
+| **K8s Client** | `integrations/kubernetes/factory.go` | P0 | `autox-core/services/kubernetes/factory.go` |
+| **K8s Client** | `integrations/kubernetes/client.go` | P0 | `autox-core/services/kubernetes/client.go` |
+| **K8s Client** | `integrations/kubernetes/internal_k8s_client.go` | P0 | `autox-core/services/kubernetes/client_internal.go` |
+| **K8s Client** | `integrations/kubernetes/token_k8s_client.go` | P0 | `autox-core/services/kubernetes/client_token.go` |
+| **K8s Client** | `integrations/kubernetes/shared_k8s_client.go` | P0 | `autox-core/services/kubernetes/client_shared.go` |
+| **K8s Client** | `integrations/kubernetes/portforward.go` | P0 | `autox-core/services/kubernetes/portforward.go` |
+| **Pipelines** | `integrations/pipelineserver/client.go` | P0 | `autox-core/services/pipelines/client.go` |
+| **Pipelines** | `integrations/pipelineserver/client_factory.go` | P0 | `autox-core/services/pipelines/` (merge into service) |
+| **Pipelines** | `repositories/pipeline.go` | P0 | `autox-core/services/pipelines/discovery.go` |
+| **Pipelines** | `api/middleware.go` (DSPA discovery) | P0 | `autox-core/services/pipelines/discovery.go` |
+| **Storage** | `integrations/s3/client.go` | P1 | `autox-core/services/storage/client.go` |
+| **Validation** | Various DNS-1123 validators | P1 | `autox-core/services/common/validation/` |
 
 ---
 
@@ -1119,7 +1119,7 @@ func ValidateUploadObjectRequest(req *UploadObjectRequest) error
 ### Phase 1: Foundation (Week 1)
 
 1. ✅ **Create autox-core package structure**
-   - Set up `packages/autox-core/bff/` directory
+   - Set up `packages/autox-core/services/` directory
    - Create `go.mod` with Go 1.24.3
    - Set up feature-based directories (kubernetes/, pipelines/, storage/, common/)
 
@@ -1220,7 +1220,7 @@ func ValidateUploadObjectRequest(req *UploadObjectRequest) error
 
 After implementation, verify:
 
-### `autox-core` BFF
+### `autox-core` services
 
 - [ ] Feature-based directory structure (kubernetes/, pipelines/, storage/)
 - [ ] Each feature has: models, client, service, validators, errors
