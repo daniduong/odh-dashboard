@@ -32,7 +32,11 @@ func (c *ModelRegistryClient) CreateModelVersion(_ context.Context, _, _ string,
 func (c *ModelRegistryClient) CreateModelArtifact(_ context.Context, _, _ string, body openapi.ModelArtifactCreate) (*openapi.ModelArtifact, error) {
 	id := "fake-artifact-id"
 	return &openapi.ModelArtifact{
-		Id:   &id,
-		Name: body.Name,
+		Id:                 &id,
+		Name:               body.Name,
+		Uri:                body.Uri,
+		ModelFormatName:    body.ModelFormatName,
+		ModelFormatVersion: body.ModelFormatVersion,
+		Description:        body.Description,
 	}, nil
 }
