@@ -31,12 +31,12 @@ dev-install-dependencies:
 	cd frontend && npm install
 
 .PHONY: dev-bff-mock
-dev-bff-mock: ## Run BFF with all mocks enabled (K8s, Pipeline Server)
-	cd bff && make run LOG_LEVEL=debug MOCK_K8S_CLIENT=true MOCK_PIPELINE_SERVER_CLIENT=true AUTH_METHOD=internal DEPLOYMENT_MODE=standalone
+dev-bff-mock: ## Run BFF with all fakes enabled (K8s, S3, Pipeline Server, Model Registry)
+	cd bff && make run LOG_LEVEL=debug AUTH_METHOD=disabled DEV_MODE=true MOCK_K8S_CLIENT=true MOCK_S3_CLIENT=true MOCK_PIPELINE_SERVER_CLIENT=true MOCK_MODEL_REGISTRY_CLIENT=true DEPLOYMENT_MODE=standalone
 
 .PHONY: dev-bff-mock-debug
-dev-bff-mock-debug: ## Run BFF with all mocks and Delve debugger on port 2345
-	cd bff && make debug LOG_LEVEL=debug MOCK_K8S_CLIENT=true MOCK_PIPELINE_SERVER_CLIENT=true AUTH_METHOD=internal DEPLOYMENT_MODE=standalone
+dev-bff-mock-debug: ## Run BFF with all fakes and Delve debugger on port 2345
+	cd bff && make debug LOG_LEVEL=debug AUTH_METHOD=disabled DEV_MODE=true MOCK_K8S_CLIENT=true MOCK_S3_CLIENT=true MOCK_PIPELINE_SERVER_CLIENT=true MOCK_MODEL_REGISTRY_CLIENT=true DEPLOYMENT_MODE=standalone
 
 .PHONY: dev-bff
 dev-bff:
@@ -97,8 +97,8 @@ dev-bff-federated:
 E2E_BFF_PORT ?= 4003
 
 .PHONY: dev-bff-e2e-mock
-dev-bff-e2e-mock: ## Run BFF for e2e tests (mock mode, no cluster required)
-	cd bff && make run PORT=$(E2E_BFF_PORT) LOG_LEVEL=info MOCK_K8S_CLIENT=true MOCK_HTTP_CLIENT=true DEV_MODE=true DEPLOYMENT_MODE=federated
+dev-bff-e2e-mock: ## Run BFF for e2e tests (fake mode, no cluster required)
+	cd bff && make run PORT=$(E2E_BFF_PORT) LOG_LEVEL=info AUTH_METHOD=disabled DEV_MODE=true MOCK_K8S_CLIENT=true MOCK_HTTP_CLIENT=true MOCK_S3_CLIENT=true MOCK_PIPELINE_SERVER_CLIENT=true MOCK_MODEL_REGISTRY_CLIENT=true DEPLOYMENT_MODE=federated
 
 .PHONY: dev-bff-e2e-cluster
 dev-bff-e2e-cluster: ## Run BFF for e2e tests (federated mode, connected to cluster)
@@ -173,6 +173,6 @@ build: frontend-build bff-build
 ############ Run mocked ########
 .PHONY: run-local-mocked
 run-local-mocked: frontend-build-standalone bff-build
-	rm -r ./bff/static-local-run && cp -r ./frontend/dist/ ./bff/static-local-run/ && cd bff && make run STATIC_ASSETS_DIR=./static-local-run MOCK_K8S_CLIENT=true DEV_MODE=true
+	rm -r ./bff/static-local-run && cp -r ./frontend/dist/ ./bff/static-local-run/ && cd bff && make run STATIC_ASSETS_DIR=./static-local-run AUTH_METHOD=disabled DEV_MODE=true MOCK_K8S_CLIENT=true MOCK_S3_CLIENT=true MOCK_PIPELINE_SERVER_CLIENT=true MOCK_MODEL_REGISTRY_CLIENT=true
 
 
